@@ -1,0 +1,16 @@
+/.bundle/
+/.yardoc
+.idea
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+
+.DS_Store
+Thumbs.db
+._*
+~*
+*~
+*.swp
