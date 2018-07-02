@@ -16,14 +16,13 @@ Use only if you have heavily invested in [active_model_serializers](https://gith
 * Simple and explicit invocation.
 * Does not leak memory in development.
 * ~200 lines of code, give or take.
+* Seems pretty darn fast, at least as fast as `public_send`, `Hash#[]=`, and `Hash#to_json` can be.
 
 **Downsides:**
 
-* No magic. Must be invoked manually.
 * Serializers cannot inherit from each other (yet).
-* Uses `#as_json` to serialize attributes.
+* Uses `#as_json` to serialize attributes (maybe unintended consequences, especially with complex objects).
 * Requires ActiveSupport.
-* Performance characteristics unknown (but seems pretty darn good for my use case).
 
 ## Usage
 
