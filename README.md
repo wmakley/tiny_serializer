@@ -11,19 +11,19 @@ Use only if you have heavily invested in [active_model_serializers](https://gith
 
 **Benefits:**
 
-* Extremely simple and deterministic behavior, no crazy adapter classes and other weirdness.
+* Extremely simple and deterministic behavior; no adapter classes and other complications. Just turns objects into hashes.
 * Easy to understand; just uses `#as_json` to serialize attributes.
-* Simple to use.
-* Does not leak memory in development (unlike AMS).
+* Simple and explicit invocation.
+* Does not leak memory in development.
 * ~200 lines of code, give or take.
 
 **Downsides:**
 
-* No automatic anything. Must be invoked manually.
+* No magic. Must be invoked manually.
 * Serializers cannot inherit from each other (yet).
-* Just uses `#as_json` to serialize attributes.
+* Uses `#as_json` to serialize attributes.
 * Requires ActiveSupport.
-* Performance characteristics unknown.
+* Performance characteristics unknown (but seems pretty darn good for my use case).
 
 ## Usage
 
@@ -93,19 +93,21 @@ class MyObjectSerializer < SimpleSerializer
   attributes :id, :first_name
 end
 
-items = [MyObject.new(1, "Fred"), MyObject.new(2, "Wilma")]
+items = [
+  MyObject.new(1, "Fred"),
+  MyObject.new(2, "Wilma")
+]
 render json: MyObjectSerializer.new(items).serializable_hash
 ```
 
 Produces:
 
 ```json
-[ {"id": 1, "name": "Fred"},
+[
+  {"id": 1, "name": "Fred"},
   {"id": 2, "name": "Wilma"}
 ]
 ```
-
-(Extraneous properties ommitted for clarity).
 
 ### Defining Associations and Serializing Sub-Objects
 
@@ -134,13 +136,13 @@ end
 ### Links and URL's
 
 When used with Rails, serializer instances have the `#url_helpers`
-method available for use in custom attribute blocks.
+method available.
 
 
 ```ruby
 class ItemSerializer < SimpleSerializer
   attribute :link do
-    url_helpers.item_url(object)
+    url_helpers.item_path(object)
   end
 end
 ```
@@ -179,15 +181,7 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
-
-    $ gem install simple_serializer
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+I will push it to rubygems.org once I get inheritance working!
 
 ## Contributing
 
