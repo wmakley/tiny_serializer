@@ -22,9 +22,8 @@ class SimpleSerializer
   end
 
   if defined?(Rails)
-    def url_helpers
-      Rails.application.routes.url_helpers
-    end
+    require "simple_serializer/rails_extensions"
+    include RailsExtensions
   end
 
   def serializable_hash
