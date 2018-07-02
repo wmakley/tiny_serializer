@@ -122,6 +122,20 @@ class MySerializer < SimpleSerializer
 end
 ```
 
+### Links and URL's
+
+When used with Rails, serializer instances have the `#url_helpers`
+method available for use in custom attribute blocks.
+
+
+```ruby
+class ItemSerializer < SimpleSerializer
+  attribute :link do
+    url_helpers.item_url(object)
+  end
+end
+```
+
 ### Notes on ID's.
 
 If you use UUID's or don't want ID's to be serialized as numeric types,
