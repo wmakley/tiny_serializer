@@ -112,8 +112,6 @@ class SimpleSerializer
     end
   end
 
-  extend DSL
-
   private
 
   def is_collection?(resource)
