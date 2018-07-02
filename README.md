@@ -95,15 +95,23 @@ end
 
 ### Notes on ID's.
 
-It coerces ID's to Strings. This is app-specific behavior I want to change or make configurable for release,
-the reason I do it is I don't want my front-end to know or care what kind of thing an ID is, or
-accidentally lose any precision. I also have some UUIDs.
-
-You can disable this behavior with:
+If you use UUID's or don't want ID's to be serialized as numeric types,
+you can have them automatically detected and coerced to Strings.
 
 ```ruby
-attribute :id, is_id: false
-attribute :association_id, is_id: false
+class MyObjectSerializer < SimpleSerializer
+  self.coerce_ids_to_string = true
+end
+```
+
+To enable globally, but opt out for a specific attribute:
+
+```ruby
+class MyObjectSerializer < SimpleSerializer
+  self.coerce_ids_to_string = true
+
+  attribute :id, is_id: false
+end
 ```
 
 
