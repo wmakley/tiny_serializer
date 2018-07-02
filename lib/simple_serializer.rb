@@ -93,6 +93,7 @@ class SimpleSerializer
       else
         records = @object.public_send(collection_name)
       end
+      records ||= []
 
       json = records.map do |record|
         serializer_instance.object = record

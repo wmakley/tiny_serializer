@@ -26,18 +26,22 @@ and it is always straightforward to do so.
 ### Serializer definition:
 
 ```ruby
-MyObject = Struct.new(:id, :first_name, :last_name, :date)
+MyObject = Struct.new(:id, :first_name, :last_name, :date) do
+  def parent; nil; end
+  def sub_record; nil; end
+  def related_items; []; end
+end
 
 class MyObjectSerializer < SimpleSerializer
   attributes :id,
              :first_name,
              :last_name,
              :date
-             
+
   belongs_to :parent, serializer: ParentSerializer
   has_one :sub_record # serializer will be inferred to be SubRecordSerializer
   has_many :related_items, serializer: RelatedItemSerializer
-  
+
   attribute :full_name do |object|
     "#{object.first_name} #{object.last_name}"
   end
@@ -52,11 +56,26 @@ my_object = MyObject.new(1, "Fred", "Flintstone", Date.new(2000, 1, 1))
 render json: MyObjectSerializer.new(my_object).serializable_hash
 ```
 
+Produces:
+
+```json
+{
+  "id": 1,
+  "first_name": "Fred",
+  "last_name": "Flintstone",
+  "date": "2000-01-01",
+  "full_name": "Fred Flintstone",
+  "parent": null,
+  "sub_record": null,
+  "related_items": []
+}
+```
+
 The `object` parameter for blocks is optional, as blocks are executed
 in the context of the serializer instance. it just makes it easier
 to use the *fast_jsonapi* gem later if you want.
 
-### Serializing collections
+### Usage with Collections:
 
 Collections are handled automatically:
 
@@ -72,8 +91,8 @@ render json: MyObjectSerializer.new(items).serializable_hash
 Produces:
 
 ```json
-[ {"id": "1", "name": "Fred"},
-  {"id": "2", "name": "Wilma"}
+[ {"id": 1, "name": "Fred"},
+  {"id": 2, "name": "Wilma"}
 ]
 ```
 
