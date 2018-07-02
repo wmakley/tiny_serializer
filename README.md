@@ -1,6 +1,6 @@
 # SimpleSerializer
 
-Extremely simple replacement for ActiveModel::Serializers. Not drop-in,
+Extremely simple replacement for [ActiveModel::Serializers](https://github.com/rails-api/active_model_serializers). Not drop-in,
 but facilitates getting off of it. It does not infer the serializer
 class to use, so you always have to specify and instantiate manually,
 and it is always straightforward to do so.
