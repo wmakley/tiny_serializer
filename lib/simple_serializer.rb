@@ -23,13 +23,13 @@ class SimpleSerializer
   attr_accessor :object
 
 
-  def initialize(object = nil)
+  def initialize(object)
     @object = object
   end
 
   def serializable_hash
     return nil unless @object
-    if is_collection?(@object)
+    if is_collection?
       json = []
       return json if @object.empty?
       original_object = @object
@@ -118,8 +118,8 @@ class SimpleSerializer
 
   private
 
-  def is_collection?(resource)
-    resource.respond_to?(:each) && !resource.respond_to?(:each_pair)
+  def is_collection?
+    @object.respond_to?(:each) && !@object.respond_to?(:each_pair)
   end
 
   def serialize_id(id)
