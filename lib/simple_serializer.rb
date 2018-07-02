@@ -1,6 +1,7 @@
 require "simple_serializer/version"
 require "simple_serializer/dsl"
 require "active_support/json"
+require "active_support/core_ext/class/attribute"
 
 # Simple ActiveModel::Serializer replacement, with some fast_jsonapi
 # compatibility parameters (that do nothing).
@@ -11,6 +12,8 @@ require "active_support/json"
 # up by becoming doubles when the JSON is parsed.
 class SimpleSerializer
   extend DSL
+
+  class_attribute :coerce_ids_to_string, default: false
 
   attr_accessor :object
 
@@ -62,7 +65,7 @@ class SimpleSerializer
         value = @object.public_send(name)
       end
 
-      if is_id
+      if is_id && coerce_ids_to_string?
         hash[name] = serialize_id(value)
       else
         hash[name] = recursively_serialize_object(value)
