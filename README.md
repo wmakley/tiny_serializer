@@ -93,6 +93,20 @@ end
 
 `has_many` works the same way, but for collections.
 
+### Notes on ID's.
+
+It coerces ID's to Strings. This is app-specific behavior I want to change or make configurable for release,
+the reason I do it is I don't want my front-end to know or care what kind of thing an ID is, or
+accidentally lose any precision. I also have some UUIDs.
+
+You can disable this behavior with:
+
+```ruby
+attribute :id, is_id: false
+attribute :association_id, is_id: false
+```
+
+
 ## Installation
 
 Add this line to your application's Gemfile:
