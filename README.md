@@ -19,10 +19,11 @@ and it is always straightforward to do so.
 * No automatic anything. Must be invoked manually.
 * Serializers cannot inherit from each other (yet).
 * Just uses `#as_json` to serialize objects, nothing fancy or intelligent.
+* Requires ActiveSupport.
 
 ## Usage
 
-**Serializer definition:**
+### Serializer definition:
 
 ```ruby
 MyObject = Struct.new(:id, :first_name, :last_name, :date)
@@ -44,7 +45,7 @@ end
 
 ```
 
-**Usage in Rails:**
+### Usage in Rails:
 
 ```ruby
 my_object = MyObject.new(1, "Fred", "Flintstone", Date.new(2000, 1, 1))
@@ -55,9 +56,32 @@ The `object` parameter for blocks is optional, as blocks are executed
 in the context of the serializer instance. it just makes it easier
 to use the *fast_jsonapi* gem later if you want.
 
-### Associations
+### Serializing collections
 
-The DSL methods `belongs_to` and `has_one` are both synonyms for "use this serializer to serialize this property". They are just syntax sugar for:
+Collections are handled automatically:
+
+```ruby
+class MyObjectSerializer < SimpleSerializer
+  attributes :id, :first_name
+end
+
+items = [MyObject.new(1, "Fred"), MyObject.new(2, "Wilma")]
+render json: MyObjectSerializer.new(items).serializable_hash
+```
+
+Produces:
+
+```json
+[ {"id": "1", "name": "Fred"},
+  {"id": "2", "name": "Wilma"}
+]
+```
+
+(Extraneous properties ommitted for clarity).
+
+### Defining Associations
+
+The DSL methods `belongs_to` and `has_one` are both synonyms for "use this serializer to serialize this property". They are syntax sugar for:
 
 ```ruby
 class MySerializer < SimpleSerializer
