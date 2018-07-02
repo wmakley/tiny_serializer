@@ -15,6 +15,7 @@ Use only if you have heavily invested in [active_model_serializers](https://gith
 * Easy to understand.
 * Simple to use.
 * Does not leak memory in development (unlike AMS).
+* ~200 lines of code, give or take.
 
 **Downsides:**
 
