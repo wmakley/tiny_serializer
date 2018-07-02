@@ -18,6 +18,7 @@ and it is always straightforward to do so.
 
 * No automatic anything. Must be invoked manually.
 * Serializers cannot inherit from each other (yet).
+* Just uses `#as_json` to serialize objects, nothing fancy or intelligent.
 
 ## Usage
 
