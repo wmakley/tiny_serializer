@@ -72,8 +72,8 @@ Produces:
 ```
 
 The `object` parameter for blocks is optional, as blocks are executed
-in the context of the serializer instance. it just makes it easier
-to use the *fast_jsonapi* gem later if you want.
+in the context of the serializer instance. It just makes it easier
+to use the [fast_jsonapi](https://github.com/Netflix/fast_jsonapi) gem later if you want.
 
 ### Usage with Collections:
 
@@ -98,19 +98,29 @@ Produces:
 
 (Extraneous properties ommitted for clarity).
 
-### Defining Associations
+### Defining Associations and Serializing Sub-Objects
 
-The DSL methods `belongs_to` and `has_one` are both synonyms for "use this serializer to serialize this property". They are syntax sugar for:
+The DSL methods `belongs_to`, `has_one`, and `has_many` are all synonyms for "use this serializer to serialize this property". They are basically syntax sugar for:
 
 ```ruby
 class MySerializer < SimpleSerializer
-  attribute :parent do
+  attribute :parent do |object|
     ParentSerializer.new(object.parent).serializable_hash
   end
 end
 ```
 
-`has_many` works the same way, but for collections.
+These methods all optionally take a block, which you can use to customize the
+object or collection. For example, to avoid loading every single item in a
+has_many relation:
+
+```ruby
+class MySerializer < SimpleSerializer
+  has_many :items, serializer: ItemSerializer do |object|
+    object.items.limit(100)
+  end
+end
+```
 
 ### Notes on ID's.
 
