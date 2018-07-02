@@ -12,7 +12,7 @@ and it is always straightforward to do so.
 * Extremely simple and deterministic behavior, no crazy adapter classes and other weirdness.
 * Easy to understand.
 * Simple to use.
-* Does not leak memory in development (unlike AMS)
+* Does not leak memory in development (unlike AMS).
 
 **Downsides:**
 
