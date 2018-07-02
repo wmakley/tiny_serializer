@@ -26,7 +26,7 @@ RSpec.describe SimpleSerializer do
     it "serializes each item in the collection" do
       collection = [TestStruct.new(1, "test1"), TestStruct.new(2, "test2")]
       expect(SubObjectSerializer.new(collection).serializable_hash).to eq(
-        [ { id: "1", name: "test1" }, { id: "2", name: "test2"} ]
+        [ { id: 1, name: "test1" }, { id: 2, name: "test2"} ]
       )
     end
   end
@@ -41,10 +41,26 @@ RSpec.describe SimpleSerializer do
       expect(subject).to be_a(Hash)
     end
 
+    context "when coerce_ids_to_string is true" do
+      Klass = Struct.new(:id, :parent_id)
+
+      def serializer
+        super do
+          self.coerce_ids_to_string = true
+          attributes :id, :parent_id
+        end
+      end
+
+      it "converts ids to string" do
+        object = Klass.new(1, 2)
+        expect(serializer.new(object).serializable_hash).to eq({ id: "1", parent_id: "2" })
+      end
+    end
+
     context "when an attribute is defined without a block" do
       def serializer
         super do
-          attribute :id, is_id: false
+          attribute :id
         end
       end
 
@@ -90,7 +106,7 @@ RSpec.describe SimpleSerializer do
 
       it "builds a hash by copying all the named properties from @object" do
         expect(subject).to eq({
-          id: "1",
+          id: 1,
           name: "test",
           date: "2000-01-01",
           boolean: true
@@ -115,9 +131,9 @@ RSpec.describe SimpleSerializer do
 
       it "serializes the sub_object recursively" do
         expect(subject).to eq({
-          id: "1",
+          id: 1,
           sub_object: {
-            id: "2",
+            id: 2,
             name: "Sub-Object"
           }
         })
@@ -158,9 +174,9 @@ RSpec.describe SimpleSerializer do
       end
 
       let :object do
-        elt1 = TestStruct.new("2", "ELT 1")
-        elt2 = TestStruct.new("3", "ELT 2")
-        TestStruct.new("1", "test", Date.new(2000, 01, 01), true, nil, [elt1, elt2])
+        elt1 = TestStruct.new(2, "ELT 1")
+        elt2 = TestStruct.new(3, "ELT 2")
+        TestStruct.new(1, "test", Date.new(2000, 01, 01), true, nil, [elt1, elt2])
       end
 
       subject do
@@ -170,8 +186,8 @@ RSpec.describe SimpleSerializer do
       it "uses the designizated serializer to serialize each object in the collection as an Array" do
         expect(subject).to eq({
           collection_items: [
-            { id: "2", name: "ELT 1" },
-            { id: "3", name: "ELT 2" },
+            { id: 2, name: "ELT 1" },
+            { id: 3, name: "ELT 2" },
           ]
         })
       end
