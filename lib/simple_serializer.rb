@@ -13,17 +13,18 @@ require "active_support/core_ext/class/attribute"
 class SimpleSerializer
   extend DSL
 
-  class_attribute :coerce_ids_to_string, default: false
-
-  attr_accessor :object
-
-  def initialize(object = nil)
-    @object = object
-  end
-
   if defined?(Rails)
     require "simple_serializer/rails_extensions"
     include RailsExtensions
+  end
+
+
+  class_attribute :coerce_ids_to_string, default: false
+  attr_accessor :object
+
+
+  def initialize(object = nil)
+    @object = object
   end
 
   def serializable_hash
