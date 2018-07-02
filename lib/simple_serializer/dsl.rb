@@ -42,11 +42,14 @@ class SimpleSerializer
       sub_records << [association_name, serializer, block]
     end
 
-    def has_many(collection_name, serializer:, record_type: nil, &block)
+    def has_many(collection_name, serializer: nil, record_type: nil, &block)
       collection(collection_name, serializer: serializer, &block)
     end
 
-    def collection(collection_name, serializer:, &block)
+    def collection(collection_name, serializer: nil, &block)
+      if serializer.nil?
+        serializer = "#{collection_name.to_s.singularize.camelize}Serializer".constantize
+      end
       collections << [collection_name, serializer, block]
     end
 

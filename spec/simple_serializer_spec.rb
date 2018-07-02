@@ -177,4 +177,20 @@ RSpec.describe SimpleSerializer do
       end
     end
   end
+
+  describe "DSL" do
+    describe "#collection" do
+      context "when serializer is nil" do
+        class CollectionItemSerializer < SimpleSerializer
+          attributes :id, :boolean
+        end
+        it "infers the serializer class from the collection name" do
+          subject = serializer do
+            collection :collection_items
+          end
+          expect(subject.send(:collections)[0]).to eq([:collection_items, CollectionItemSerializer, nil])
+        end
+      end
+    end
+  end
 end
