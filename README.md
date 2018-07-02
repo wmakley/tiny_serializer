@@ -12,7 +12,7 @@ Use only if you have heavily invested in [active_model_serializers](https://gith
 **Benefits:**
 
 * Extremely simple and deterministic behavior, no crazy adapter classes and other weirdness.
-* Easy to understand.
+* Easy to understand; just uses `#as_json` to serialize attributes.
 * Simple to use.
 * Does not leak memory in development (unlike AMS).
 * ~200 lines of code, give or take.
@@ -21,8 +21,9 @@ Use only if you have heavily invested in [active_model_serializers](https://gith
 
 * No automatic anything. Must be invoked manually.
 * Serializers cannot inherit from each other (yet).
-* Just uses `#as_json` to serialize objects, nothing fancy or intelligent.
+* Just uses `#as_json` to serialize attributes.
 * Requires ActiveSupport.
+* Performance characteristics unknown.
 
 ## Usage
 
