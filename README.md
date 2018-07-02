@@ -5,6 +5,8 @@ but facilitates getting off of it. It does not infer the serializer
 class to use, so you always have to specify and instantiate manually,
 and it is always straightforward to do so.
 
+![Travis CI Build Status](https://travis-ci.org/wmakley/simple_serializer.svg?branch=master)
+
 **Benefits:**
 
 * Extremely simple and deterministic behavior, no crazy adapter classes and other weirdness.
