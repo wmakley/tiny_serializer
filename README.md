@@ -79,6 +79,11 @@ The `object` parameter for blocks is optional, as blocks are executed
 in the context of the serializer instance. It just makes it easier
 to use the [fast_jsonapi](https://github.com/Netflix/fast_jsonapi) gem later if you want.
 
+### Under the Hood
+
+Takes every attribute you define, and uses it to call `#public_send` on the object to serialize,
+then uses `#as_json` to serialize the resulting value. If you define the attribute with a block, it will call the block to get the value instead.
+
 ### Usage with Collections:
 
 Collections are handled automatically:
