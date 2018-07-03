@@ -204,7 +204,7 @@ RSpec.describe SimpleSerializer do
           subject = serializer do
             collection :collection_items
           end
-          expect(subject.send(:collections)[0]).to eq([:collection_items, CollectionItemSerializer, nil])
+          expect(subject.send(:collections)[0][2]).to eq(CollectionItemSerializer)
         end
       end
     end

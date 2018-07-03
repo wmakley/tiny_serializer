@@ -6,10 +6,37 @@ require "active_support/core_ext/class/attribute"
 # Simple ActiveModel::Serializer replacement, with some fast_jsonapi
 # compatibility parameters (that do nothing).
 #
-# One major difference: ID's are serialized as
-# strings by default. The reason is that they are just dumb tokens,
-# and we don't want to have to worry about them getting messed
-# up by becoming doubles when the JSON is parsed.
+# == Usage
+#
+#   # my_object.rb
+#   MyObject = Struct.new(:id, :first_name, :last_name, :date) do
+#     def parent; nil; end
+#     def sub_record; nil; end
+#     def related_items; []; end
+#   end
+#
+#   # my_object_serializer.rb
+#   class MyObjectSerializer < SimpleSerializer
+#     attributes :id,
+#                :first_name,
+#                :last_name,
+#                :date
+#
+#     belongs_to :parent, serializer: ParentSerializer
+#     has_one :sub_record # serializer will be inferred to be SubRecordSerializer
+#     has_many :related_items, serializer: RelatedItemSerializer
+#
+#     attribute :full_name do
+#       "#{object.first_name} #{object.last_name}"
+#     end
+#   end
+#
+#   # my_objects_controller.rb
+#   def show
+#     @my_object = MyObject.new(1, "Fred", "Flintstone", Date.new(2000, 1, 1))
+#     render json: MyObjectSerializer.new(@my_object).serializable_hash
+#   end
+#
 class SimpleSerializer
   extend DSL
 
@@ -19,14 +46,22 @@ class SimpleSerializer
   end
 
 
+  # Whether to automatically convert "\*_id" properties to String. *default:* _false_
   class_attribute :coerce_ids_to_string, default: false
+
+  # The object to serialize as a Hash
   attr_accessor :object
 
 
+  # Create a new serializer instance.
+  #
+  # object::
+  #   The object to serialize. Can be a single object or a collection of objects.
   def initialize(object)
     @object = object
   end
 
+  # Serialize #object as a Hash.
   def serializable_hash
     return nil unless @object
     if is_collection?
@@ -35,31 +70,64 @@ class SimpleSerializer
       original_object = @object
       original_object.each do |object|
         @object = object
-        json << serialize_object_to_hash
+        json << serialize_single_object_to_hash
       end
       @object = original_object
       return json
     else
-      return serialize_object_to_hash
+      return serialize_single_object_to_hash
     end
   end
 
   alias_method :to_hash, :serializable_hash
   alias_method :serialize, :serializable_hash
 
+  # Serialize #object as a Hash, then call #as_json on the Hash,
+  # which will basically convert keys to Strings (as they are in JSON objects).
+  #
+  # <b>There shouldn't be a need to call this, but we implement it to fully support
+  # ActiveSupport's magic.</b>
   def as_json(options = nil)
     serializable_hash.as_json
   end
 
+  # Serialize #object as a Hash, then call #to_json on the resulting Hash, converting it
+  # to a String using the automatic facilities for doing so from ActiveSupport.
   def to_json(options = nil)
     serializable_hash.to_json
   end
 
-  def serialize_object_to_hash
+  def is_collection?
+    @object.respond_to?(:each) && !@object.respond_to?(:each_pair)
+  end
+
+  # = Class Methods
+  class << self
+    # Serialize a single object as a Hash
+    #
+    # object::
+    #   Can be a single object or a collection of objects
+    #
+    # Exactly the same as:
+    #
+    #   new(object).serializable_hash
+    #
+    def serialize(object)
+      new(object).serializable_hash
+    end
+
+    alias_method :serialize_each, :serialize
+  end
+
+  private
+
+  # Private serialization implementation for a single object.
+  # @object must be set to a single object before calling.
+  def serialize_single_object_to_hash
     return nil unless @object
     hash = {}
 
-    self.class.attributes.each do |name, is_id, block|
+    self.class.attributes.each do |name, key, is_id, block|
       if block
         value = instance_exec(@object, &block)
       else
@@ -67,13 +135,13 @@ class SimpleSerializer
       end
 
       if is_id && coerce_ids_to_string?
-        hash[name] = serialize_id(value)
+        hash[key] = serialize_id(value)
       else
-        hash[name] = recursively_serialize_object(value)
+        hash[key] = convert_object_to_json(value)
       end
     end
 
-    self.class.sub_records.each do |name, serializer, block|
+    self.class.sub_records.each do |name, key, serializer, block|
       if block
         value = instance_exec(@object, &block)
       else
@@ -83,10 +151,10 @@ class SimpleSerializer
       if value
         value = serializer.new(value).serializable_hash
       end
-      hash[name] = value
+      hash[key] = value
     end
 
-    self.class.collections.each do |collection_name, serializer, block|
+    self.class.collections.each do |collection_name, key, serializer, block|
       serializer_instance = serializer.new(nil)
 
       if block
@@ -100,35 +168,20 @@ class SimpleSerializer
         serializer_instance.object = record
         serializer_instance.serializable_hash
       end
-      hash[collection_name] = json
+      hash[key] = json
     end
 
     return hash
   end
 
-
-  class << self
-    def serialize(object)
-      new(object).serializable_hash
-    end
-
-    def serialize_each(collection)
-      return new(collection).serializable_hash
-    end
-  end
-
-  private
-
-  def is_collection?
-    @object.respond_to?(:each) && !@object.respond_to?(:each_pair)
+  # Internal algorithm to convert any object to a valid JSON string, scalar, object, array, etc.
+  # All objects are passed through this function after they are retrieved from #object.
+  # Currently just calls #as_json.
+  def convert_object_to_json(object)
+    return object.as_json
   end
 
   def serialize_id(id)
     id && id.to_s
-  end
-
-  # Recursion not implemented yet, just calls #as_json on object.
-  def recursively_serialize_object(object)
-    return object.as_json
   end
 end
