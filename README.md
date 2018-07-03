@@ -172,7 +172,7 @@ end
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'simple_serializer'
+gem 'simple_serializer', git: 'https://github.com/wmakley/simple_serializer.git'
 ```
 
 And then execute:
