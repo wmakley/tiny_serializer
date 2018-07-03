@@ -1,7 +1,6 @@
 require "simple_serializer/version"
 require "simple_serializer/dsl"
 require "active_support/json"
-require "active_support/core_ext/class/attribute"
 
 # Simple ActiveModel::Serializer replacement, with some fast_jsonapi
 # compatibility parameters (that do nothing).
