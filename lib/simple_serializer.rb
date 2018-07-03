@@ -44,6 +44,7 @@ class SimpleSerializer
   end
 
   alias_method :to_hash, :serializable_hash
+  alias_method :serialize, :serializable_hash
 
   def as_json(options = nil)
     serializable_hash.as_json
@@ -125,25 +126,8 @@ class SimpleSerializer
     id && id.to_s
   end
 
-  # Only recurses if the object is an Array or Hash
+  # Recursion not implemented yet, just calls #as_json on object.
   def recursively_serialize_object(object)
-    # return object if object.is_a?(String) # fast out for common case
-
-    # if object.respond_to?(:as_json)
-      return object.as_json
-    # end
-
-    # TODO: work without ActiveSupport
-    # if object.eql?(true) || object.eql?(false) || object.kind_of?(Numeric)
-    #   return object
-    # end
-
-    # if object.is_a?(Array)
-    #   return object.map do |elt|
-    #     recursively_serialize_object(elt)
-    #   end
-    # end
-
-    return object.to_s
+    return object.as_json
   end
 end
