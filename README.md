@@ -20,7 +20,6 @@ Use only if you have heavily invested in [active_model_serializers](https://gith
 
 **Downsides:**
 
-* Serializers cannot inherit from each other (yet).
 * Uses `#as_json` to serialize attributes (maybe unintended consequences, especially with complex objects).
 * Requires ActiveSupport.
 
