@@ -3,15 +3,37 @@ require "active_support/core_ext/string/inflections"
 class SimpleSerializer
   module DSL
     def sub_records
-      @sub_records ||= []
+      unless @sub_records
+        if superclass.respond_to?(:sub_records)
+          @sub_records = superclass.sub_records.dup
+        else
+          @sub_records = []
+        end
+      end
+      return @sub_records
+    end
+
+    def sub_record_names
+      sub_records.map(&:first)
     end
 
     def collections
-      @collections ||= []
+      unless @collections
+        if superclass.respond_to?(:collections)
+          @collections = superclass.collections.dup
+        else
+          @collections = []
+        end
+      end
+      return @collections
+    end
+
+    def collection_names
+      collections.map(&:first)
     end
 
     def attribute(name, is_id: is_id?(name), &block)
-      @attributes ||= []
+      _initialize_attributes
       name = name.to_sym
       attribute = [name, is_id, block]
       @attributes << attribute
@@ -23,8 +45,24 @@ class SimpleSerializer
         names.each do |name|
           attribute(name)
         end
+      else
+        _initialize_attributes
       end
-      return @attributes || []
+      return @attributes
+    end
+
+    def _initialize_attributes
+      return true if @attributes
+      if superclass.respond_to?(:attributes)
+        @attributes = superclass.attributes.dup
+      else
+        @attributes = []
+      end
+      return @attributes
+    end
+
+    def attribute_names
+      attributes.map(&:first)
     end
 
     def has_one(association_name, serializer: nil, record_type: nil, polymorphic: false, &block)

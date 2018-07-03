@@ -208,5 +208,80 @@ RSpec.describe SimpleSerializer do
         end
       end
     end
+
+    describe "#attributes" do
+      it "is inheritable by subclasses" do
+        s1 = serializer do
+          attribute :id
+        end
+
+        s2 = Class.new(s1)
+        expect(s2.attribute_names).to eq([:id])
+      end
+
+      it "is extendable by subclasses" do
+        s1 = serializer do
+          attribute :id
+        end
+
+        s2 = Class.new(s1)
+        s2.class_eval do
+          attribute :name
+        end
+
+        expect(s1.attribute_names).to eq([:id])
+        expect(s2.attribute_names).to eq([:id, :name])
+      end
+    end
+
+    describe "#sub_records" do
+      it "is inheritable by subclasses" do
+        s1 = serializer do
+          sub_record :sub_object, serializer: SubObjectSerializer
+        end
+
+        s2 = Class.new(s1)
+        expect(s2.sub_record_names).to eq([:sub_object])
+      end
+
+      it "is extendable by subclasses" do
+        s1 = serializer do
+          sub_record :sub_object, serializer: SubObjectSerializer
+        end
+
+        s2 = Class.new(s1)
+        s2.class_eval do
+          sub_record :sub_object_2, serializer: SubObjectSerializer
+        end
+
+        expect(s1.sub_record_names).to eq([:sub_object])
+        expect(s2.sub_record_names).to eq([:sub_object, :sub_object_2])
+      end
+    end
+
+    describe "#collections" do
+      it "is inheritable by subclasses" do
+        s1 = serializer do
+          collection :items, serializer: SubObjectSerializer
+        end
+
+        s2 = Class.new(s1)
+        expect(s2.collection_names).to eq([:items])
+      end
+
+      it "is extendable by subclasses" do
+        s1 = serializer do
+          collection :items, serializer: SubObjectSerializer
+        end
+
+        s2 = Class.new(s1)
+        s2.class_eval do
+          collection :items_2, serializer: SubObjectSerializer
+        end
+
+        expect(s1.collection_names).to eq([:items])
+        expect(s2.collection_names).to eq([:items, :items_2])
+      end
+    end
   end
 end
