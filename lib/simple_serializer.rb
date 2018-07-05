@@ -3,7 +3,7 @@ require "simple_serializer/dsl"
 require "active_support/json"
 require "active_support/core_ext/class/attribute"
 
-# Simple ActiveModel::Serializer replacement, with some fast_jsonapi
+# Simple ActiveModel::Serializer replacement, with some fast_jsonapi[https://github.com/Netflix/fast_jsonapi]
 # compatibility parameters (that do nothing).
 #
 # == Usage
@@ -83,20 +83,23 @@ class SimpleSerializer
   alias_method :serialize, :serializable_hash
 
   # Serialize #object as a Hash, then call #as_json on the Hash,
-  # which will basically convert keys to Strings (as they are in JSON objects).
+  # which will convert keys to Strings (as they are in JSON objects).
   #
   # <b>There shouldn't be a need to call this, but we implement it to fully support
-  # ActiveSupport's magic.</b>
+  # ActiveSupport's magic JSON protocols.</b>
   def as_json(options = nil)
     serializable_hash.as_json
   end
 
-  # Serialize #object as a Hash, then call #to_json on the resulting Hash, converting it
+  # Serialize #object to a JSON String.
+  #
+  # Calls #serializable_hash, then call #to_json on the resulting Hash, converting it
   # to a String using the automatic facilities for doing so from ActiveSupport.
   def to_json(options = nil)
     serializable_hash.to_json
   end
 
+  # Check if #object is a collection.
   def is_collection?
     @object.respond_to?(:each) && !@object.respond_to?(:each_pair)
   end

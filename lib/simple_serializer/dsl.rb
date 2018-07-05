@@ -38,7 +38,7 @@ class SimpleSerializer
 
     # Definite a new attribute to serialize. The value to serialize is retrieved in one of two ways:
     #
-    # 1. *Default:* Calls <tt>object#public_send(name)</tt>
+    # 1. *Default:* Calls #public_send(name) on SimpleSerializer#object.
     # 2. *Block:* The return value of the block is used.
     #
     # name::
@@ -48,7 +48,7 @@ class SimpleSerializer
     # is_id::
     #   Optional. Whether the attribute is a database ID. Guessed from its name by default.
     #
-    def attribute(name, key: name, is_id: is_id?(name), &block)
+    def attribute(name, key: name, is_id: _is_id?(name), &block)
       _initialize_attributes
       name = name.to_sym
       attribute = [name, key, is_id, block]
@@ -68,18 +68,6 @@ class SimpleSerializer
       return @attributes
     end
 
-    # :nodoc:
-    # Private method to initialize inherited attributes.
-    def _initialize_attributes
-      return true if @attributes
-      if superclass.respond_to?(:attributes)
-        @attributes = superclass.attributes.dup
-      else
-        @attributes = []
-      end
-      return @attributes
-    end
-
     # Get the names of all attributes defined using #attribute.
     def attribute_names
       attributes.map(&:first)
@@ -88,7 +76,7 @@ class SimpleSerializer
     # Alias of #sub_record
     #
     # The parameters *record_type* and *polymorphic* are ignored,
-    # and provided only to smooth migration to fast_jsonaspi.
+    # and provided only to smooth migration to fast_jsonapi[https://github.com/Netflix/fast_jsonapi].
     def has_one(association_name, serializer: nil, record_type: nil, polymorphic: false, &block)
       sub_record(association_name, serializer: serializer)
     end
@@ -96,22 +84,17 @@ class SimpleSerializer
     # Alias of #sub_record
     #
     # The parameters *record_type* and *polymorphic* are ignored,
-    # and provided only to smooth migration to fast_jsonaspi.
+    # and provided only to smooth migration to fast_jsonapi[https://github.com/Netflix/fast_jsonapi].
     def belongs_to(association_name, serializer: nil, record_type: nil, polymorphic: false, &block)
       sub_record(association_name, serializer: serializer)
     end
 
-    # Define a serializer to use for a sub-object of #object.
+    # Define a serializer to use for a sub-object of SimpleSerializer#object.
     # <b>If given a block:</b> Will use the block to retrieve the
-    # object, instead of object#public_send(name).
-    #
-    # == Positional Arguments
+    # object, instead of public_send(name).
     #
     # name::
     #   The method name of the sub-object.
-    #
-    # == Keyword Arguments
-    #
     # serializer::
     #   Optional. The serializer class to use. Inferred from name if blank.
     # key::
@@ -128,45 +111,52 @@ class SimpleSerializer
     # Alias of #collection
     #
     # The *record_type* parameter is ignored, and provided only to
-    # smooth migration to *fast_jsonaspi*.
-    def has_many(collection_name, key: collection_name, serializer: nil, record_type: nil, &block)
-      collection(collection_name, serializer: serializer, &block)
+    # smooth migration to fast_jsonapi[https://github.com/Netflix/fast_jsonapi].
+    def has_many(name, key: name, serializer: nil, record_type: nil, &block)
+      collection(name, serializer: serializer, &block)
     end
 
     # Define a serializer to use to serialize a collection of objects
-    # as an Array.
+    # as an Array. Will call #public_send(name) on SimpleSerializer#object
+    # to get the items in the collection, or use the return value of
+    # the block.
     #
-    # == Positional Arguments
-    #
-    # collection_name::
+    # name::
     #   The name of the collection.
-    #
-    # == Keyword Arguments
-    #
     # key::
     #   Optional. Defaults to *name*. The Hash key to assign the serialized Array to.
     # serializer::
-    #   Optional, inferred from *collection_name*. The serializer class to user to serialize each item in the collection.
+    #   Optional, inferred from *collection_name*. The serializer class to use to serialize each item in the collection.
     #
-    def collection(collection_name, key: collection_name, serializer: nil, &block)
+    def collection(name, key: name, serializer: nil, &block)
       if serializer.nil?
-        serializer = "#{collection_name.to_s.singularize.camelize}Serializer".constantize
+        serializer = "#{name.to_s.singularize.camelize}Serializer".constantize
       end
-      collections << [collection_name, key, serializer, block]
+      collections << [name, key, serializer, block]
     end
 
-    # NOOP for smoothing migration to *fast_jsonapi*.
+    # NOOP for smoothing migration to fast_jsonapi[https://github.com/Netflix/fast_jsonapi].
     def set_type(_)
     end
 
-    # NOOP for smoothing migration to *fast_jsonapi*.
+    # NOOP for smoothing migration to fast_jsonapi[https://github.com/Netflix/fast_jsonapi].
     def set_id(_)
     end
 
-    private
+    # Private method to initialize inherited attributes.
+    def _initialize_attributes # :nodoc:
+      return true if @attributes
+      if superclass.respond_to?(:attributes)
+        @attributes = superclass.attributes.dup
+      else
+        @attributes = []
+      end
+      return @attributes
+    end
 
-    def is_id?(name)
-      name == :id || (/.*_id\z/).match?(name.to_s)
+    # Private method to check if an attribute name is an ID.
+    def _is_id?(name)
+      name == :id || name.to_s.ends_with?("_id")
     end
   end
 end
