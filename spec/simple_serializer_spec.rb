@@ -192,6 +192,16 @@ RSpec.describe SimpleSerializer do
         })
       end
     end
+
+    context "when an attribute returns an Array" do
+      it "serializes the Array as an Array" do
+        object = TestStruct.new([1, 2, 3])
+        klass = serializer do
+          attribute :id
+        end
+        expect(klass.new(object).serializable_hash).to eq(id: [1, 2, 3])
+      end
+    end
   end
 
   describe "DSL" do
