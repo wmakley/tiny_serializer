@@ -51,7 +51,10 @@ class SimpleSerializer
   class_attribute :coerce_ids_to_string, default: false
 
   # The object to serialize as a Hash
-  attr_accessor :object, :logger
+  attr_accessor :object
+
+  # Optional logger object. Defaults to Rails.logger if Rails is defined.
+  attr_accessor :logger
 
 
   # Create a new serializer instance.
