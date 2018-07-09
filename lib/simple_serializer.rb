@@ -43,7 +43,7 @@ class SimpleSerializer
 
   if defined?(Rails)
     require "simple_serializer/rails_extensions"
-    include RailsExtensions
+    prepend RailsExtensions
   end
 
 
@@ -51,7 +51,7 @@ class SimpleSerializer
   class_attribute :coerce_ids_to_string, default: false
 
   # The object to serialize as a Hash
-  attr_accessor :object
+  attr_accessor :object, :logger
 
 
   # Create a new serializer instance.
