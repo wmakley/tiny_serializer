@@ -3,6 +3,7 @@ require "simple_serializer/dsl"
 require "active_support/json"
 require "active_support/core_ext/class/attribute"
 
+# Simple DSL for writing a
 # Simple ActiveModel::Serializer replacement, with some fast_jsonapi[https://github.com/Netflix/fast_jsonapi]
 # compatibility parameters (that do nothing).
 #
@@ -106,15 +107,9 @@ class SimpleSerializer
 
   # = Class Methods
   class << self
-    # Serialize a single object as a Hash
+    # The same as:
     #
-    # object::
-    #   Can be a single object or a collection of objects
-    #
-    # Exactly the same as:
-    #
-    #   new(object).serializable_hash
-    #
+    #   SimpleSerializer.new(object).serializable_hash
     def serialize(object)
       new(object).serializable_hash
     end
