@@ -3,9 +3,11 @@ require "simple_serializer/dsl"
 require "active_support/json"
 require "active_support/core_ext/class/attribute"
 
-# Simple DSL for writing a
-# Simple ActiveModel::Serializer replacement, with some fast_jsonapi[https://github.com/Netflix/fast_jsonapi]
-# compatibility parameters (that do nothing).
+# Simple DSL for converting objects to Hashes, which is mostly API-compatible with
+# ActiveModel::Serializer. The Hashes can be rendered as JSON by Rails.
+#
+# I have also added some fast_jsonapi[https://github.com/Netflix/fast_jsonapi] API
+# parameters that do nothing, to ease later transition to that library.
 #
 # == Usage
 #

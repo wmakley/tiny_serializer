@@ -1,18 +1,23 @@
 # SimpleSerializer
 
-Extremely simple replacement for [ActiveModel::Serializers](https://github.com/rails-api/active_model_serializers). Not drop-in,
-but facilitates getting off of it. It does not infer the serializer
-class to use, so you always have to specify and instantiate manually,
-and it is always straightforward to do so.
+Simple DSL for converting objects to Hashes, which is mostly API-compatible with
+[ActiveModel::Serializers](https://github.com/rails-api/active_model_serializers).
+Not quite a drop-in replacement, but facilitates migrating away from it.
+The resulting Hashes can be rendered as JSON by Rails using the ActiveSupport::JSON
+module.
 
-Use only if you have heavily invested in [active_model_serializers](https://github.com/rails-api/active_model_serializers), but have started experiencing the same frustrations I had with it and can't transition to [jsonapi-rb](http://jsonapi-rb.org/) or [fast_jsonapi](https://github.com/Netflix/fast_jsonapi).
+Unlike AMS, it does **not** integrate with Rails for automatic usage with the `render` function,
+which has proven to be one of the biggest sources of confusion and complexity for me.
+`render json: @object` will continue to work exactly as it does in a base Rails setup.
+
+Use if you have heavily invested in [active_model_serializers](https://github.com/rails-api/active_model_serializers), but have started experiencing the same frustrations I had with it and can't transition to [jsonapi-rb](http://jsonapi-rb.org/) or [fast_jsonapi](https://github.com/Netflix/fast_jsonapi).
 
 ![Travis CI Build Status](https://travis-ci.org/wmakley/simple_serializer.svg?branch=master)
 
 **Benefits:**
 
-* Extremely simple and deterministic behavior; no adapter classes and other complications. Just turns objects into hashes.
-* Easy to understand; just uses `#as_json` to serialize attributes.
+* Extremely simple and deterministic behavior; no adapter classes and other complications. Just turns Objects into Hashes.
+* Easy to understand; uses `#as_json` to serialize attributes.
 * Simple and explicit invocation.
 * Does not leak memory in development.
 * ~200 lines of code, give or take.
