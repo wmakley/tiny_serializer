@@ -155,7 +155,7 @@ class SimpleSerializer
     end
 
     # Private method to check if an attribute name is an ID.
-    def _is_id?(name)
+    def _is_id?(name) # :nodoc:
       name == :id || name.to_s.end_with?("_id")
     end
   end
