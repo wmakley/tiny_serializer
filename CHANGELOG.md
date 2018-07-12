@@ -13,8 +13,8 @@
 ## 0.2.0
 
 * Implement serialized attribute inheritance.
-* Readme improvements.
-* Add this changelog.
+* README improvements.
+* Add this CHANGELOG.
 
 ## 0.1.0
 
