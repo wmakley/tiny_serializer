@@ -130,13 +130,13 @@ RSpec.describe SimpleSerializer do
       end
 
       it "serializes the sub_object recursively" do
-        expect(subject).to eq({
+        expect(subject).to eq(
           id: 1,
           sub_object: {
             id: 2,
             name: "Sub-Object"
           }
-        })
+        )
       end
     end
 
@@ -146,19 +146,22 @@ RSpec.describe SimpleSerializer do
           belongs_to :sub_object
         end
       end
+
       def sub_object
         TestStruct.new("2", "Sub-Object")
       end
+
       subject do
         object_serializer.new(object).serializable_hash
       end
+
       it "guesses the serializer class from the name" do
-        expect(subject).to eq({
+        expect(subject).to eq(
           sub_object: {
             id: "2",
             name: "Sub-Object"
           }
-        })
+        )
       end
     end
 
@@ -176,7 +179,7 @@ RSpec.describe SimpleSerializer do
       let :object do
         elt1 = TestStruct.new(2, "ELT 1")
         elt2 = TestStruct.new(3, "ELT 2")
-        TestStruct.new(1, "test", Date.new(2000, 01, 01), true, nil, [elt1, elt2])
+        TestStruct.new(1, "test", Date.new(2000, 1, 1), true, nil, [elt1, elt2])
       end
 
       subject do
@@ -184,12 +187,24 @@ RSpec.describe SimpleSerializer do
       end
 
       it "uses the designizated serializer to serialize each object in the collection as an Array" do
-        expect(subject).to eq({
+        expect(subject).to eq(
           collection_items: [
             { id: 2, name: "ELT 1" },
-            { id: 3, name: "ELT 2" },
+            { id: 3, name: "ELT 2" }
           ]
-        })
+        )
+      end
+
+      it "treats a nil collection as an empty Array" do
+        klass = serializer do
+          has_many :items, serializer: CollectionSerializer do
+            nil
+          end
+        end
+
+        expect(klass.new(object).serializable_hash).to eq(
+          items: []
+        )
       end
     end
 
