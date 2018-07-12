@@ -69,31 +69,29 @@ class SimpleSerializer
 
   # Serialize #object as a Hash.
   def serializable_hash
-    return nil unless @object
-    if is_collection?
-      json = []
-      return json if @object.empty?
-      original_object = @object
-      original_object.each do |object|
-        @object = object
-        json << serialize_single_object_to_hash
-      end
-      @object = original_object
-      return json
-    else
-      return serialize_single_object_to_hash
+    return @object unless @object
+    return serialize_single_object_to_hash unless is_collection?
+
+    json = []
+    return json if @object.empty?
+    original_object = @object
+    original_object.each do |object|
+      @object = object
+      json << serialize_single_object_to_hash
     end
+    @object = original_object
+    json
   end
 
-  alias_method :to_hash, :serializable_hash
-  alias_method :serialize, :serializable_hash
+  alias to_hash serializable_hash
+  alias serialize serializable_hash
 
   # Serialize #object as a Hash, then call #as_json on the Hash,
   # which will convert keys to Strings (as they are in JSON objects).
   #
   # <b>There shouldn't be a need to call this, but we implement it to fully support
   # ActiveSupport's magic JSON protocols.</b>
-  def as_json(options = nil)
+  def as_json
     serializable_hash.as_json
   end
 
@@ -101,7 +99,7 @@ class SimpleSerializer
   #
   # Calls #serializable_hash, then call #to_json on the resulting Hash, converting it
   # to a String using the automatic facilities for doing so from ActiveSupport.
-  def to_json(options = nil)
+  def to_json
     serializable_hash.to_json
   end
 
@@ -119,7 +117,7 @@ class SimpleSerializer
       new(object).serializable_hash
     end
 
-    alias_method :serialize_each, :serialize
+    alias serialize_each serialize
   end
 
   private

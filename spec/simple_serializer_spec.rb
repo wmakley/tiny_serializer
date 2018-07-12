@@ -294,4 +294,21 @@ RSpec.describe SimpleSerializer do
       end
     end
   end
+
+  describe ".serialize_each" do
+    def serializer
+      super do
+        attribute :id
+      end
+    end
+    it "works" do
+      collection = [TestStruct.new(1), TestStruct.new(2)]
+      expect(serializer.serialize_each(collection)).to eq(
+        [
+          { id: 1 },
+          { id: 2 }
+        ]
+      )
+    end
+  end
 end
