@@ -3,11 +3,11 @@ require "simple_serializer/dsl"
 require "active_support/json"
 require "active_support/core_ext/class/attribute"
 
-# Simple DSL for converting objects to Hashes, which is mostly API-compatible with
-# ActiveModel::Serializer. The Hashes can be rendered as JSON by Rails.
+# Simple DSL for converting objects to Hashes, which is mostly API-compatible
+# with ActiveModel::Serializer. The Hashes can be rendered as JSON by Rails.
 #
-# I have also added some fast_jsonapi[https://github.com/Netflix/fast_jsonapi] API
-# parameters that do nothing, to ease later transition to that library.
+# I have also added some fast_jsonapi[https://github.com/Netflix/fast_jsonapi]
+# API parameters that do nothing, to ease later transition to that library.
 #
 # == Usage
 #
@@ -53,21 +53,21 @@ class SimpleSerializer
     prepend RailsExtensions
   end
 
-
-  # Whether to automatically convert "\*_id" properties to String. *default:* _false_
+  # Whether to automatically convert "\*_id" properties to String.
+  # *default:* _false_
   class_attribute :coerce_ids_to_string, default: false
 
   # The object to serialize as a Hash
   attr_accessor :object
 
-  # Optional logger object. Defaults to Rails.logger if Rails is defined.
+  # Optional logger object. Defaults to Rails.logger in a Rails app.
   attr_accessor :logger
-
 
   # Create a new serializer instance.
   #
   # object::
-  #   The object to serialize. Can be a single object or a collection of objects.
+  #   The object to serialize. Can be a single object or a collection of
+  #   objects.
   def initialize(object)
     @object = object
   end
@@ -141,24 +141,27 @@ class SimpleSerializer
 
   def serialize_attributes(hash)
     self.class.attributes.each do |name, key, is_id, block|
-      value = if block
-                instance_exec(@object, &block)
-              else
-                @object.public_send(name)
-              end
+      raw_value = get_attribute(name, block)
+      hash[key] = serialize_attribute(raw_value, is_id)
+    end
+  end
 
-      hash[key] = serialize_attribute(value, is_id)
+  def get_attribute(name, block)
+    if block
+      instance_exec(@object, &block)
+    else
+      @object.public_send(name)
     end
   end
 
   # Internal algorithm to convert any object to a valid JSON string, scalar,
   # object, array, etc. All objects are passed through this function after they
   # are retrieved from #object. Currently just calls #as_json.
-  def serialize_attribute(value, is_id = false)
+  def serialize_attribute(raw_value, is_id = false)
     if is_id && coerce_ids_to_string?
-      serialize_id(value)
+      serialize_id(raw_value)
     else
-      value.as_json
+      raw_value.as_json
     end
   end
 
@@ -168,26 +171,15 @@ class SimpleSerializer
 
   def serialize_sub_records(hash)
     self.class.sub_records.each do |name, key, serializer, block|
-      value = if block
-                instance_exec(@object, &block)
-              else
-                @object.public_send(name)
-              end
-
+      value = get_attribute(name, block)
       value = serializer.new(value).serializable_hash if value
-
       hash[key] = value
     end
   end
 
   def serialize_collections(hash)
     self.class.collections.each do |collection_name, key, serializer, block|
-      collection = if block
-                     instance_exec(@object, &block)
-                   else
-                     @object.public_send(collection_name)
-                   end
-      collection ||= []
+      collection = get_collection(collection_name, block)
 
       serializer_instance = serializer.new(nil)
       json_array = []
@@ -199,5 +191,13 @@ class SimpleSerializer
 
       hash[key] = json_array
     end
+  end
+
+  def get_collection(name, block)
+    if block
+      instance_exec(@object, &block)
+    else
+      @object.public_send(name)
+    end || []
   end
 end
