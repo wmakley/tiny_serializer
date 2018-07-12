@@ -11,5 +11,6 @@ Style/StringLiterals:
 Style/SafeNavigation:
   Enabled: false
 
+# Don't care about frozen string literals because we don't have any string literals.
 Style/FrozenStringLiteralComment:
   Enabled: false
