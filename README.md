@@ -184,7 +184,7 @@ And then execute:
 
     $ bundle
 
-I will push it to rubygems.org once I get inheritance working!
+I will push it to rubygems.org once I pick a new name!
 
 ## Contributing
 
