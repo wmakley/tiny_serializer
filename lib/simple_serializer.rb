@@ -193,6 +193,7 @@ class SimpleSerializer
     end
   end
 
+  # Get the collection from #object or block, or [] if nil.
   def get_collection(name, block)
     if block
       instance_exec(@object, &block)
