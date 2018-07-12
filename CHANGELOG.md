@@ -2,6 +2,7 @@
 
 ## 0.3.0
 
+* Fix blocks not being passed on to the #sub_record method.
 * Major documentation improvements.
 * Code cleanup and simplification.
 * Travis CI config improvements.
