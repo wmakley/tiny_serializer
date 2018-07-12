@@ -5,5 +5,7 @@ AllCops:
   Exclude:
     - "**/*_spec.rb"
 
+# This cop is annoying. We might want to make this work on an old Ruby sometime,
+# so STFU.
 "Style/SafeNavigation":
   Enabled: false
