@@ -40,6 +40,11 @@ require "active_support/core_ext/class/attribute"
 #     render json: MyObjectSerializer.new(@my_object).serializable_hash
 #   end
 #
+# == RailsExtensions
+#
+# The RailsExtensions module is automatically prepended when SimpleSerializer
+# is used in a Rails app. It defines some small convenience instance methods.
+#
 class SimpleSerializer
   extend DSL
 

@@ -1,11 +1,14 @@
 class SimpleSerializer
+  # Small convenience improvements to SimpleSerializer
+  # that are automatically included as serializer instance methods
+  # when used in a Rails app.
   module RailsExtensions
-    # Alias of Rails.application.routes.url_helpers
+    # Shortcut to +Rails.application.routes.url_helpers+.
     def url_helpers
       Rails.application.routes.url_helpers
     end
 
-    # Make Rails.logger the default logger.
+    # Return +Rails.logger+ if SimpleSerializer#logger is not set.
     def logger
       super || Rails.logger
     end
