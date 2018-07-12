@@ -1,0 +1,9 @@
+AllCops:
+  TargetRubyVersion: 2.3
+
+"Style/StringLiterals":
+  Exclude:
+    - "**/*_spec.rb"
+
+"Style/SafeNavigation":
+  Enabled: false
