@@ -127,64 +127,74 @@ class SimpleSerializer
   # Private serialization implementation for a single object.
   # @object must be set to a single object before calling.
   def serialize_single_object_to_hash
-    return nil unless @object
+    return @object unless @object
+
     hash = {}
-
-    self.class.attributes.each do |name, key, is_id, block|
-      if block
-        value = instance_exec(@object, &block)
-      else
-        value = @object.public_send(name)
-      end
-
-      if is_id && coerce_ids_to_string?
-        hash[key] = serialize_id(value)
-      else
-        hash[key] = convert_object_to_json(value)
-      end
-    end
-
-    self.class.sub_records.each do |name, key, serializer, block|
-      if block
-        value = instance_exec(@object, &block)
-      else
-        value = @object.public_send(name)
-      end
-
-      if value
-        value = serializer.new(value).serializable_hash
-      end
-      hash[key] = value
-    end
-
-    self.class.collections.each do |collection_name, key, serializer, block|
-      serializer_instance = serializer.new(nil)
-
-      if block
-        records = instance_exec(@object, &block)
-      else
-        records = @object.public_send(collection_name)
-      end
-      records ||= []
-
-      json = records.map do |record|
-        serializer_instance.object = record
-        serializer_instance.serializable_hash
-      end
-      hash[key] = json
-    end
-
-    return hash
+    serialize_attributes(hash)
+    serialize_sub_records(hash)
+    serialize_collections(hash)
+    hash
   end
 
-  # Internal algorithm to convert any object to a valid JSON string, scalar, object, array, etc.
-  # All objects are passed through this function after they are retrieved from #object.
-  # Currently just calls #as_json.
-  def convert_object_to_json(object)
-    return object.as_json
+  def serialize_attributes(hash)
+    self.class.attributes.each do |name, key, is_id, block|
+      value = if block
+                instance_exec(@object, &block)
+              else
+                @object.public_send(name)
+              end
+
+      hash[key] = serialize_attribute(value, is_id)
+    end
+  end
+
+  # Internal algorithm to convert any object to a valid JSON string, scalar,
+  # object, array, etc. All objects are passed through this function after they
+  # are retrieved from #object. Currently just calls #as_json.
+  def serialize_attribute(value, is_id = false)
+    if is_id && coerce_ids_to_string?
+      serialize_id(value)
+    else
+      value.as_json
+    end
   end
 
   def serialize_id(id)
     id && id.to_s
+  end
+
+  def serialize_sub_records(hash)
+    self.class.sub_records.each do |name, key, serializer, block|
+      value = if block
+                instance_exec(@object, &block)
+              else
+                @object.public_send(name)
+              end
+
+      value = serializer.new(value).serializable_hash if value
+
+      hash[key] = value
+    end
+  end
+
+  def serialize_collections(hash)
+    self.class.collections.each do |collection_name, key, serializer, block|
+      collection = if block
+                     instance_exec(@object, &block)
+                   else
+                     @object.public_send(collection_name)
+                   end
+      collection ||= []
+
+      serializer_instance = serializer.new(nil)
+      json_array = []
+
+      collection.each do |object|
+        serializer_instance.object = object
+        json_array << serializer_instance.serializable_hash
+      end
+
+      hash[key] = json_array
+    end
   end
 end
