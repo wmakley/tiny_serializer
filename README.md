@@ -60,7 +60,7 @@ end
 
 ```ruby
 my_object = MyObject.new(1, "Fred", "Flintstone", Date.new(2000, 1, 1))
-render json: MyObjectSerializer.new(my_object).serializable_hash
+render json: MyObjectSerializer.new(my_object)
 ```
 
 Produces:
@@ -77,6 +77,8 @@ Produces:
   "related_items": []
 }
 ```
+
+This works because **SimpleSerializer** implements `#as_json` and `#to_json`, as well as `#serializable_hash`.
 
 The `object` parameter for blocks is optional, as blocks are executed
 in the context of the serializer instance. It just makes it easier
