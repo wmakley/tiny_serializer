@@ -75,7 +75,7 @@ class SimpleSerializer
   # Serialize #object as a Hash.
   def serializable_hash
     return @object unless @object
-    return serialize_single_object_to_hash unless is_collection?
+    return serialize_single_object_to_hash unless collection?
 
     json = []
     return json if @object.empty?
@@ -92,24 +92,25 @@ class SimpleSerializer
   alias serialize serializable_hash
 
   # Serialize #object as a Hash, then call #as_json on the Hash,
-  # which will convert keys to Strings (as they are in JSON objects).
+  # which will convert keys to Strings.
   #
-  # <b>There shouldn't be a need to call this, but we implement it to fully support
-  # ActiveSupport's magic JSON protocols.</b>
-  def as_json
+  # <b>There shouldn't be a need to call this, but we implement it to fully
+  # support ActiveSupport's magic JSON protocols.</b>
+  def as_json(_ = nil)
     serializable_hash.as_json
   end
 
   # Serialize #object to a JSON String.
   #
-  # Calls #serializable_hash, then call #to_json on the resulting Hash, converting it
-  # to a String using the automatic facilities for doing so from ActiveSupport.
-  def to_json
+  # Calls #serializable_hash, then call #to_json on the resulting Hash,
+  # converting it to a String using the automatic facilities for doing so
+  # from ActiveSupport.
+  def to_json(_ = nil)
     serializable_hash.to_json
   end
 
   # Check if #object is a collection.
-  def is_collection?
+  def collection?
     @object.respond_to?(:each) && !@object.respond_to?(:each_pair)
   end
 
