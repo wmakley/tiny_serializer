@@ -62,7 +62,7 @@ to use the [fast_jsonapi](https://github.com/Netflix/fast_jsonapi) gem later if 
 ### Usage in Rails:
 
 In Rails, calling #serialize is optional, although
-I'm not the biggest fan:
+I'm not the biggest fan (it loses some explicitness):
 
 ```ruby
 my_object = MyObject.new(1, "Fred", "Flintstone", Date.new(2000, 1, 1))
