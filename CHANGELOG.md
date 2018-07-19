@@ -6,6 +6,7 @@
 * Major documentation improvements.
 * Code cleanup and simplification.
 * Travis CI config improvements.
+* Allow #as_json and #to_json to take arguments.
 
 ## 0.2.1
 
