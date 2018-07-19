@@ -53,8 +53,11 @@ class MyObjectSerializer < SimpleSerializer
     "#{object.first_name} #{object.last_name}"
   end
 end
-
 ```
+
+The `object` parameter for blocks is optional, as blocks are executed
+in the context of the serializer instance. It just makes it easier
+to use the [fast_jsonapi](https://github.com/Netflix/fast_jsonapi) gem later if you want.
 
 ### Usage in Rails:
 
@@ -82,10 +85,6 @@ Still produces:
 ```
 
 This works because **SimpleSerializer** implements `#as_json` and `#to_json`, as well as `#serializable_hash`.
-
-The `object` parameter for blocks is optional, as blocks are executed
-in the context of the serializer instance. It just makes it easier
-to use the [fast_jsonapi](https://github.com/Netflix/fast_jsonapi) gem later if you want.
 
 ### Under the Hood
 
