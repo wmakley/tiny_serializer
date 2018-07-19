@@ -58,12 +58,15 @@ end
 
 ### Usage in Rails:
 
+In Rails, calling #serialize is optional, although
+I'm not the biggest fan:
+
 ```ruby
 my_object = MyObject.new(1, "Fred", "Flintstone", Date.new(2000, 1, 1))
 render json: MyObjectSerializer.new(my_object)
 ```
 
-Produces:
+Still produces:
 
 ```json
 {
@@ -102,7 +105,7 @@ items = [
   MyObject.new(1, "Fred"),
   MyObject.new(2, "Wilma")
 ]
-render json: MyObjectSerializer.new(items).serializable_hash
+render json: MyObjectSerializer.new(items).serialize
 ```
 
 Produces:
@@ -121,7 +124,7 @@ The DSL methods `belongs_to`, `has_one`, and `has_many` are all synonyms for "us
 ```ruby
 class MySerializer < SimpleSerializer
   attribute :parent do |object|
-    ParentSerializer.new(object.parent).serializable_hash
+    ParentSerializer.new(object.parent).serialize
   end
 end
 ```

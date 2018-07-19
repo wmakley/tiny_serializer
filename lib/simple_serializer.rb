@@ -37,7 +37,7 @@ require "active_support/core_ext/class/attribute"
 #   # my_objects_controller.rb
 #   def show
 #     @my_object = MyObject.new(1, "Fred", "Flintstone", Date.new(2000, 1, 1))
-#     render json: MyObjectSerializer.new(@my_object).serializable_hash
+#     render json: MyObjectSerializer.new(@my_object).serialize
 #   end
 #
 # == RailsExtensions
@@ -73,7 +73,7 @@ class SimpleSerializer
   end
 
   # Serialize #object as a Hash.
-  def serializable_hash
+  def serializable_hash(_ = nil)
     return @object unless @object
     return serialize_single_object_to_hash unless collection?
 
