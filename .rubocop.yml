@@ -18,3 +18,7 @@ Style/FrozenStringLiteralComment:
 Metrics/BlockLength:
   Exclude:
     - "**/*_spec.rb"
+
+Layout/EmptyLines:
+  Exclude:
+    - "**/*_spec.rb"
