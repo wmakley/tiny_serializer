@@ -1,5 +1,10 @@
 # SimpleSerializer Change Log
 
+## 0.3.1
+
+* Fix bug where collections would be checked for existence before serialization,
+  causing unnecessary database queries.
+
 ## 0.3.0
 
 * Fix blocks not being passed on to the #sub_record method.
@@ -7,8 +12,6 @@
 * Code cleanup and simplification.
 * Travis CI config improvements.
 * Allow #as_json and #to_json to take arguments.
-* Fix bug where collections would be checked for existence before serialization,
-  causing unnecessary database queries.
 
 ## 0.2.1
 
