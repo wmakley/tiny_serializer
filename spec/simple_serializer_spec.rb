@@ -219,6 +219,7 @@ RSpec.describe SimpleSerializer do
     end
   end
 
+  # TODO: move this into its own file?
   describe "DSL" do
     describe "#collection" do
       context "when serializer is nil" do
