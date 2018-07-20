@@ -2,7 +2,8 @@ require "spec_helper"
 require "date"
 
 RSpec.describe SimpleSerializer do
-  # Build a new SimpleSerializer subclass. string and block will be evaluated in class context.
+  # Build a new SimpleSerializer subclass. string and/or block will be evaluated
+  # in class context.
   def serializer(string = nil, &block)
     klass = Class.new(SimpleSerializer)
     klass.class_eval(string) if string
@@ -16,7 +17,9 @@ RSpec.describe SimpleSerializer do
     nil
   end
 
-  let(:object) { TestStruct.new(1, "test", Date.new(2000, 1, 1), true, sub_object, []) }
+  let(:object) do
+    TestStruct.new(1, "test", Date.new(2000, 1, 1), true, sub_object, [])
+  end
 
   class SubObjectSerializer < SimpleSerializer
     attributes :id, :name
@@ -26,7 +29,7 @@ RSpec.describe SimpleSerializer do
     it "serializes each item in the collection" do
       collection = [TestStruct.new(1, "test1"), TestStruct.new(2, "test2")]
       expect(SubObjectSerializer.new(collection).serializable_hash).to eq(
-        [ { id: 1, name: "test1" }, { id: 2, name: "test2"} ]
+        [{ id: 1, name: "test1" }, { id: 2, name: "test2"}]
       )
     end
   end
