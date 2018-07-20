@@ -7,6 +7,8 @@
 * Code cleanup and simplification.
 * Travis CI config improvements.
 * Allow #as_json and #to_json to take arguments.
+* Fix bug where collections would be checked for existence before serialization,
+  causing unnecessary database queries.
 
 ## 0.2.1
 
