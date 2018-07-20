@@ -78,7 +78,7 @@ class SimpleSerializer
     return serialize_single_object_to_hash unless collection?
 
     json = []
-    return json if @object.empty?
+    return json if @object.nil?
     original_object = @object
     original_object.each do |object|
       @object = object
