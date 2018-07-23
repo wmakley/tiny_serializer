@@ -80,7 +80,7 @@ MyObjectSerializer.serialize(objects) # this still works
 
 ### Usage in Rails:
 
-In Rails, calling #serialize is optional because SimpleSerializer implements all the 'magic' methods (`as_json`, `to_json`, and `serializable_hash`), although I'm not the biggest fan (it loses some explicitness):
+In Rails, calling `.serialize` is optional because SimpleSerializer implements all the 'magic' methods (`as_json`, `to_json`, and `serializable_hash`), although I'm not the biggest fan (it loses some explicitness):
 
 ```ruby
 my_object = MyObject.new(1, "Fred", "Flintstone", Date.new(2000, 1, 1))
