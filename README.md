@@ -55,9 +55,26 @@ class MyObjectSerializer < SimpleSerializer
 end
 ```
 
+**Notes on blocks:**
+
 The `object` parameter for blocks is optional, as blocks are executed
 in the context of the serializer instance. It just makes it easier
 to use the [fast_jsonapi](https://github.com/Netflix/fast_jsonapi) gem later if you want.
+
+### Usage:
+
+```ruby
+object = MyObject.new(...)
+# Several ways to invoke the serializer are available:
+MyObjectSerializer.new(object).serialize
+MyObjectSerializer.serialize(object)
+
+# With collections:
+objects = [MyObject.new, MyObject.new]
+MyObjectSerializer.new(objects).serialize # this still works
+MyObjectSerializer.serialize_each(objects) # this works too
+MyObjectSerializer.serialize(objects) # this still works
+```
 
 ### Usage in Rails:
 
