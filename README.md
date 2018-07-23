@@ -85,35 +85,13 @@ Produces:
 }
 ```
 
-With collections:
-
-```ruby
-class IdOnlySerializer < SimpleSerializer
-  attribute :id
-end
-
-objects = [MyObject.new(1), MyObject.new(2)]
-IdOnlySerializer.new(objects).serialize # this still works
-IdOnlySerializer.serialize_each(objects) # this works too
-IdOnlySerializer.serialize(objects) # this still works
-```
-
-Produces:
-
-```json
-[
-  { "id": 1 },
-  { "id": 2 }
-]
-```
-
 ### Usage in Rails:
 
 In Rails, calling `.serialize` is optional because **SimpleSerializer** implements all the 'magic' methods (`as_json`, `to_json`, and `serializable_hash`), although I'm not the biggest fan (it loses some explicitness):
 
 ```ruby
-my_object = MyObject.new(1, "Fred", "Flintstone", Date.new(2000, 1, 1))
-render json: MyObjectSerializer.new(my_object)
+@model = MyObject.new(1, "Fred", "Flintstone", Date.new(2000, 1, 1))
+render json: MyObjectSerializer.new(@model)
 ```
 
 ### Under the Hood
@@ -134,7 +112,7 @@ items = [
   MyObject.new(1, "Fred"),
   MyObject.new(2, "Wilma")
 ]
-render json: MyObjectSerializer.new(items).serialize
+MyObjectSerializer.new(items).serialize
 ```
 
 Produces:
