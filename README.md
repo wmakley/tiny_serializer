@@ -88,18 +88,22 @@ Produces:
 With collections:
 
 ```ruby
+class IdOnlySerializer < SimpleSerializer
+  attribute :id
+end
+
 objects = [MyObject.new(1), MyObject.new(2)]
-MyObjectSerializer.new(objects).serialize # this still works
-MyObjectSerializer.serialize_each(objects) # this works too
-MyObjectSerializer.serialize(objects) # this still works
+IdOnlySerializer.new(objects).serialize # this still works
+IdOnlySerializer.serialize_each(objects) # this works too
+IdOnlySerializer.serialize(objects) # this still works
 ```
 
 Produces:
 
 ```json
 [
-  { "id": 1, ... },
-  { "id": 2, ... }
+  { "id": 1 },
+  { "id": 2 }
 ]
 ```
 
