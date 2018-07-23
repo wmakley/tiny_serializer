@@ -138,7 +138,7 @@ end
 
 These methods all optionally take a block, which you can use to customize the
 object or collection. For example, to avoid loading every single item in a
-has_many relation:
+`has_many` relation:
 
 ```ruby
 class MySerializer < SimpleSerializer
@@ -164,7 +164,7 @@ end
 
 ### Notes on ID's.
 
-If you use UUID's or don't want ID's to be serialized as numeric types,
+If you don't want ID's to be serialized as numeric types,
 you can have them automatically detected and coerced to Strings.
 
 ```ruby
