@@ -1,5 +1,9 @@
 # SimpleSerializer Change Log
 
+## 0.3.2
+
+* Add note to README.md about attribute inheritance.
+
 ## 0.3.1
 
 * Fix bug where collections would be checked for existence before serialization,

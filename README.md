@@ -175,6 +175,21 @@ class MyObjectSerializer < SimpleSerializer
 end
 ```
 
+### Attribute Inheritance
+
+Attributes are inherited from parent classes, but can be extended.
+This example works as you would expect from [active_model_serializers](https://github.com/rails-api/active_model_serializers):
+
+```ruby
+class MyObjectSerializer < SimpleSerializer
+  attribute :id
+
+  class WithName < MyObjectSerializer
+    attribute :name
+  end
+end
+```
+
 
 ## Installation
 
