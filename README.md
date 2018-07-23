@@ -178,7 +178,8 @@ end
 ### Attribute Inheritance
 
 Attributes are inherited from parent classes, but can be extended.
-This example works as you would expect from [active_model_serializers](https://github.com/rails-api/active_model_serializers):
+This example works as you would expect from [active_model_serializers](https://github.com/rails-api/active_model_serializers)
+(the `name` attribute will only appear if you use `MyObjectSerializer::WithName.serialize(my_object)`):
 
 ```ruby
 class MyObjectSerializer < SimpleSerializer
