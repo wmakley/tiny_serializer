@@ -236,6 +236,16 @@ RSpec.describe SimpleSerializer do
           expect(subject.send(:collections)[0][2]).to eq(CollectionItemSerializer)
         end
       end
+
+      context "when serializer is not a SimpleSerializer subclass" do
+        it "raises ArgumentError" do
+          expect {
+            serializer do
+              collection :collection_items, serializer: Object
+            end
+          }.to raise_error(ArgumentError)
+        end
+      end
     end
 
     describe "#attributes" do

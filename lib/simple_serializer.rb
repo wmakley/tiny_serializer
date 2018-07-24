@@ -173,7 +173,7 @@ class SimpleSerializer
   def serialize_sub_records(hash)
     self.class.sub_records.each do |name, key, serializer, block|
       value = get_attribute(name, block)
-      value = serializer.new(value).serializable_hash if value
+      value = serializer.new(value).serialize if value
       hash[key] = value
     end
   end
@@ -187,7 +187,7 @@ class SimpleSerializer
 
       collection.each do |object|
         serializer_instance.object = object
-        json_array << serializer_instance.serializable_hash
+        json_array << serializer_instance.serialize
       end
 
       hash[key] = json_array

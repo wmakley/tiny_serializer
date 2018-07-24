@@ -2,6 +2,8 @@
 
 ## 0.3.2
 
+* Raises ArgumentError if a specified serializer is not actually a
+  SimpleSerializer subclass.
 * Add note to README.md about attribute inheritance.
 
 ## 0.3.1

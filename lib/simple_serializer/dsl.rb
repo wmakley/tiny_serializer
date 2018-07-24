@@ -103,6 +103,8 @@ class SimpleSerializer
     def sub_record(name, key: name, serializer: nil, &block)
       if serializer.nil?
         serializer = "#{name.to_s.camelize}Serializer".constantize
+      elsif !_is_serializer?(serializer)
+        raise ArgumentError, "#{serializer} does not appear to be a SimpleSerializer"
       end
 
       sub_records << [name, key, serializer, block]
@@ -131,6 +133,8 @@ class SimpleSerializer
     def collection(name, key: name, serializer: nil, &block)
       if serializer.nil?
         serializer = "#{name.to_s.singularize.camelize}Serializer".constantize
+      elsif !_is_serializer?(serializer)
+        raise ArgumentError, "#{serializer} does not appear to be a SimpleSerializer"
       end
       collections << [name, key, serializer, block]
     end
@@ -157,6 +161,11 @@ class SimpleSerializer
     # Private method to check if an attribute name is an ID.
     def _is_id?(name) # :nodoc:
       name == :id || name.to_s.end_with?("_id")
+    end
+
+    # Private method to check if a class is a SimpleSerializer subclass
+    def _is_serializer?(klass)
+      klass.ancestors.include?(SimpleSerializer)
     end
   end
 end
