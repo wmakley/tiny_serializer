@@ -296,6 +296,16 @@ RSpec.describe SimpleSerializer do
         expect(s1.sub_record_names).to eq([:sub_object])
         expect(s2.sub_record_names).to eq([:sub_object, :sub_object_2])
       end
+
+      context "when serializer is not a SimpleSerializer subclass" do
+        it "raises ArgumentError" do
+          expect {
+            serializer do
+              sub_record :sub_object, serializer: Object
+            end
+          }.to raise_error(ArgumentError)
+        end
+      end
     end
 
     describe "#collections" do
