@@ -100,6 +100,20 @@ RSpec.describe SimpleSerializer do
       end
     end
 
+    context "when an attribute is defined with a block that takes two arguments" do
+      def serializer
+        super do
+          attribute :id do |object, options|
+            options[:foo]
+          end
+        end
+      end
+      it "passes @object as the first block argument and options as the second" do
+        hash = serializer.new(object, { foo: "bar" }).serializable_hash
+        expect(hash).to eq({ id: "bar" })
+      end
+    end
+
     context "when multiple attributes are defined" do
       def serializer
         super do
@@ -168,6 +182,38 @@ RSpec.describe SimpleSerializer do
       end
     end
 
+    context "when belongs_to relationship is defined with options" do
+      def object_serializer
+        serializer do
+          belongs_to :sub_object, serializer: SubObjectOptionsSerializer
+        end
+      end
+
+      class SubObjectOptionsSerializer < SubObjectSerializer
+        attribute :options do |_, options|
+          options[:foo]
+        end
+      end
+
+      def sub_object
+        TestStruct.new("2", "Sub-Object")
+      end
+
+      subject do
+        object_serializer.new(object, { foo: "bar" }).serializable_hash
+      end
+
+      it "guesses the serializer class from the name" do
+        expect(subject).to eq(
+          sub_object: {
+            id: "2",
+            name: "Sub-Object",
+            options: "bar"
+          }
+        )
+      end
+    end
+
     context "when a collection relationship is defined" do
       class CollectionSerializer < SimpleSerializer
         attributes :id, :name
@@ -208,6 +254,25 @@ RSpec.describe SimpleSerializer do
         expect(klass.new(object).serializable_hash).to eq(
           items: []
         )
+      end
+
+      context "when options provided to parent serializer" do
+        class CollectionOptionSerializer < SimpleSerializer
+          attribute :foo do |object, options|
+            "#{object.name} #{options[:foo]}"
+          end
+        end
+        it "passes options to each serializer" do
+          klass = serializer do
+            has_many :collection_items, serializer: CollectionOptionSerializer
+          end
+          expect(klass.new(object, { foo: "bar" }).serializable_hash).to eq(
+            collection_items: [
+              { foo: "ELT 1 bar" },
+              { foo: "ELT 2 bar" }
+            ]
+          )
+        end
       end
     end
 

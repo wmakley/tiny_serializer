@@ -181,7 +181,25 @@ class MyObjectSerializer < SimpleSerializer
 
   attribute :id, is_id: false
 end
+
+### Notes on Options
+
+If you want to pass in options to the serializer you can access via the second argument of the block
+
+
+class MyObjectSerializer < SimpleSerializer
+  attribute :id do |object, options|
+    options[:prefix] + object.id
+  end
+end
 ```
+MyObjectSerializer.new(object, { prefix: "prefix_" }).serialize
+
+Produces:
+
+{
+  id: "prefix_id"
+}
 
 ### Attribute Inheritance
 
