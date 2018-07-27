@@ -2,6 +2,7 @@
 
 ## 0.4.0
 
+* Implement options parameter (from AMS).
 * Raises ArgumentError if a specified serializer is not actually a
   SimpleSerializer subclass.
 * Add note to README.md about attribute inheritance.
