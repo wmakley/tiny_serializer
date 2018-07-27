@@ -60,6 +60,9 @@ class SimpleSerializer
   # The object to serialize as a Hash
   attr_accessor :object
 
+  # Hash of data to be passed to blocks
+  attr_accessor :options
+
   # Optional logger object. Defaults to Rails.logger in a Rails app.
   attr_accessor :logger
 
@@ -68,8 +71,9 @@ class SimpleSerializer
   # object::
   #   The object to serialize. Can be a single object or a collection of
   #   objects.
-  def initialize(object)
+  def initialize(object, options = {})
     @object = object
+    @options = options
   end
 
   # Serialize #object as a Hash.
@@ -149,7 +153,7 @@ class SimpleSerializer
 
   def get_attribute(name, block)
     if block
-      instance_exec(@object, &block)
+      instance_exec(@object, @options, &block)
     else
       @object.public_send(name)
     end

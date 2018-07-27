@@ -100,6 +100,20 @@ RSpec.describe SimpleSerializer do
       end
     end
 
+    context "when an attribute is defined with a block that takes two arguments" do
+      def serializer
+        super do
+          attribute :id do |object, options|
+            options[:foo]
+          end
+        end
+      end
+      it "passes @object as the first block argument and options as the second" do
+        hash = serializer.new(object, { foo: "bar" }).serializable_hash
+        expect(hash).to eq({ id: "bar" })
+      end
+    end
+
     context "when multiple attributes are defined" do
       def serializer
         super do
