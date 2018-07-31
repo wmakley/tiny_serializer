@@ -185,11 +185,12 @@ RSpec.describe SimpleSerializer do
     context "when belongs_to relationship is defined with options" do
       def object_serializer
         serializer do
-          belongs_to :sub_object, serializer: SubObjectOptionsSerializer
+          belongs_to :sub_object, serializer: SubObjectWithOptionsSerializer
         end
       end
 
-      class SubObjectOptionsSerializer < SubObjectSerializer
+      class SubObjectWithOptionsSerializer < SimpleSerializer
+        attributes :id, :name
         attribute :options do |_, options|
           options[:foo]
         end
@@ -203,7 +204,7 @@ RSpec.describe SimpleSerializer do
         object_serializer.new(object, { foo: "bar" }).serializable_hash
       end
 
-      it "guesses the serializer class from the name" do
+      it "passes the options to the block when reading the sub-object" do
         expect(subject).to eq(
           sub_object: {
             id: "2",
@@ -257,14 +258,14 @@ RSpec.describe SimpleSerializer do
       end
 
       context "when options provided to parent serializer" do
-        class CollectionOptionSerializer < SimpleSerializer
+        class CollectionUsingOptionsSerializer < SimpleSerializer
           attribute :foo do |object, options|
             "#{object.name} #{options[:foo]}"
           end
         end
-        it "passes options to each serializer" do
+        it "passes options to each collection item serializer" do
           klass = serializer do
-            has_many :collection_items, serializer: CollectionOptionSerializer
+            has_many :collection_items, serializer: CollectionUsingOptionsSerializer
           end
           expect(klass.new(object, { foo: "bar" }).serializable_hash).to eq(
             collection_items: [
@@ -405,7 +406,7 @@ RSpec.describe SimpleSerializer do
         attribute :id
       end
     end
-    it "works" do
+    it "serializes a collection as an Array" do
       collection = [TestStruct.new(1), TestStruct.new(2)]
       expect(serializer.serialize_each(collection)).to eq(
         [

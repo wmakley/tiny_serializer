@@ -76,7 +76,7 @@ class SimpleSerializer
     @options = options
   end
 
-  # Serialize #object as a Hash.
+  # Serialize #object as a Hash with Symbol keys.
   def serializable_hash(_ = nil)
     return @object unless @object
     return serialize_single_object_to_hash unless collection?
@@ -186,7 +186,7 @@ class SimpleSerializer
     self.class.collections.each do |collection_name, key, serializer, block|
       collection = get_collection(collection_name, block)
 
-      serializer_instance = serializer.new(nil)
+      serializer_instance = serializer.new(nil, nil)
       json_array = []
 
       collection.each do |object|
