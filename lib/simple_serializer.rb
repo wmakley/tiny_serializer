@@ -186,12 +186,10 @@ class SimpleSerializer
     self.class.collections.each do |collection_name, key, serializer, block|
       collection = get_collection(collection_name, block)
 
-      serializer_instance = serializer.new(nil)
       json_array = []
 
       collection.each do |object|
-        serializer_instance.object = object
-        serializer_instance.options = @options
+        serializer_instance = serializer.new(object, @options)
         json_array << serializer_instance.serialize
       end
 
@@ -202,7 +200,7 @@ class SimpleSerializer
   # Get the collection from #object or block, or [] if nil.
   def get_collection(name, block)
     if block
-      instance_exec(@object, &block)
+      instance_exec(@object, @options, &block)
     else
       @object.public_send(name)
     end || []

@@ -153,7 +153,6 @@ end
 When used with Rails, serializer instances have the `#url_helpers`
 method available.
 
-
 ```ruby
 class ItemSerializer < SimpleSerializer
   attribute :link do
@@ -187,19 +186,24 @@ end
 If you want to pass in options to the serializer you can access via the second argument of the block
 
 
+```ruby
 class MyObjectSerializer < SimpleSerializer
   attribute :id do |object, options|
     options[:prefix] + object.id
   end
 end
-```
+
 MyObjectSerializer.new(object, { prefix: "prefix_" }).serialize
+```
 
 Produces:
 
+```json
 {
-  id: "prefix_id"
+  "id": "prefix_id"
 }
+```
+
 
 ### Attribute Inheritance
 
