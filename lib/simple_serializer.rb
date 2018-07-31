@@ -202,7 +202,7 @@ class SimpleSerializer
   # Get the collection from #object or block, or [] if nil.
   def get_collection(name, block)
     if block
-      instance_exec(@object, &block)
+      instance_exec(@object, @options, &block)
     else
       @object.public_send(name)
     end || []

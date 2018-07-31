@@ -286,6 +286,22 @@ RSpec.describe SimpleSerializer do
         expect(klass.new(object).serializable_hash).to eq(id: [1, 2, 3])
       end
     end
+
+    context "when options provided to has_many serializer" do
+      it "passes the options to each serializer" do
+        base_serializer = serializer do
+          has_many :collection_items, serializer: CollectionSerializer do |_, options|
+            options[:override]
+          end
+        end
+        elt3 = TestStruct.new(4, "ELT 3")
+        expect(base_serializer.new(object, { override: [elt3] }).serializable_hash).to eq(
+           collection_items: [
+             { id: 4, name: "ELT 3" }
+           ]
+         )
+      end
+    end
   end
 
   # TODO: move this into its own file?
