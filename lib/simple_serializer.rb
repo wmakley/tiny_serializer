@@ -186,12 +186,9 @@ class SimpleSerializer
     self.class.collections.each do |collection_name, key, serializer, block|
       collection = get_collection(collection_name, block)
 
-      serializer_instance = serializer.new(nil, nil)
       json_array = []
-
       collection.each do |object|
-        serializer_instance.object = object
-        serializer_instance.options = @options
+        serializer_instance = serializer.new(object, @options)
         json_array << serializer_instance.serialize
       end
 

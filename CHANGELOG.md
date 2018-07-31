@@ -3,6 +3,7 @@
 ## 0.4.1
 
 * Pass options to has_many definition block.
+* Use a new serializer instance to serialize each item in a collection.
 
 ## 0.4.0
 
