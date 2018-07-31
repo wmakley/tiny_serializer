@@ -1,5 +1,9 @@
 # SimpleSerializer Change Log
 
+## 0.4.1
+
+* Pass options to has_many definition block.
+
 ## 0.4.0
 
 * Implement options parameter (from AMS).
