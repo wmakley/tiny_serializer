@@ -274,6 +274,22 @@ RSpec.describe SimpleSerializer do
           )
         end
       end
+
+      context 'when options provided to has_many serializer' do
+        it 'passes the options to each serializer' do
+          klass = serializer do
+            has_many :collection_items, serializer: CollectionSerializer do |_, options|
+              options[:override]
+            end
+          end
+          elt3 = TestStruct.new(4, "ELT 3")
+          expect(klass.new(object, { override: [elt3] }).serializable_hash).to eq(
+            collection_items: [
+              { id: 4, name: "ELT 3" }
+            ]
+          )
+        end
+      end
     end
 
     context "when an attribute returns an Array" do
