@@ -175,7 +175,7 @@ class SimpleSerializer
   def serialize_sub_records(hash)
     self.class.sub_records.each do |name, key, serializer, block|
       value = get_attribute(name, block)
-      value = serializer.new(value, @options).serialize if value
+      value = serializer.new(value, @options).serializable_hash
       hash[key] = value
     end
   end
