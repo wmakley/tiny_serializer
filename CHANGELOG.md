@@ -1,5 +1,9 @@
 # SimpleSerializer Change Log
 
+## 0.5.1
+
+* Minor code clarity improvements.
+
 ## 0.5.0
 
 * Pass options to has_many definition block.

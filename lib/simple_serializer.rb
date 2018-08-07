@@ -77,12 +77,11 @@ class SimpleSerializer
   end
 
   # Serialize #object as a Hash with Symbol keys.
+  # Returns nil if #object is nil.
   def serializable_hash(_ = nil)
-    return @object unless @object
     return serialize_single_object_to_hash unless collection?
 
     json = []
-    return json if @object.nil?
     original_object = @object
     original_object.each do |object|
       @object = object
@@ -135,7 +134,7 @@ class SimpleSerializer
   # Private serialization implementation for a single object.
   # @object must be set to a single object before calling.
   def serialize_single_object_to_hash
-    return @object unless @object
+    return nil if @object.nil?
 
     hash = {}
     serialize_attributes(hash)
