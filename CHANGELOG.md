@@ -1,6 +1,6 @@
 # SimpleSerializer Change Log
 
-## 0.4.1
+## 0.5.0
 
 * Pass options to has_many definition block.
 * Use a new serializer instance to serialize each item in a collection.
