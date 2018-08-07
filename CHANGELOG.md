@@ -1,5 +1,10 @@
 # SimpleSerializer Change Log
 
+## 0.5.3
+
+* Raise ArgumentError if serialize_each called without a collection.
+  (Helps find unexpected values earlier in testing.)
+
 ## 0.5.2
 
 * Fix place I forgot to create a new serializer instance.
