@@ -6,8 +6,7 @@ Style/StringLiterals:
   Exclude:
     - "**/*_spec.rb"
 
-# This cop is annoying. We might want to make this work on an old Ruby sometime,
-# so STFU.
+# We might want to make this work on an old Ruby sometime.
 Style/SafeNavigation:
   Enabled: false
 
