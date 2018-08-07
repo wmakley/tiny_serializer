@@ -167,7 +167,7 @@ class SimpleSerializer
 
     # Private method to check if a class is a SimpleSerializer subclass
     def _is_serializer?(klass)
-      klass.ancestors.include?(SimpleSerializer)
+      klass <= SimpleSerializer
     end
   end
 end
