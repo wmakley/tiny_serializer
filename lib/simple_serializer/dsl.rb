@@ -99,6 +99,7 @@ class SimpleSerializer
     #   The method name of the sub-object.
     # serializer::
     #   Optional. The serializer class to use. Inferred from name if blank.
+    #   Must be a subclass of SimpleSerializer.
     # key::
     #   Optional. Defaults to *name*. The Hash key to assign the sub-record's JSON to.
     #
@@ -131,6 +132,7 @@ class SimpleSerializer
     #   Optional. Defaults to *name*. The Hash key to assign the serialized Array to.
     # serializer::
     #   Optional, inferred from *collection_name*. The serializer class to use to serialize each item in the collection.
+    #   Must be a subclass of SimpleSerializer.
     #
     def collection(name, key: name, serializer: nil, &block)
       if serializer.nil?
