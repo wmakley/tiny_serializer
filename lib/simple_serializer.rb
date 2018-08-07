@@ -111,9 +111,9 @@ class SimpleSerializer
     serializable_hash.to_json
   end
 
-  # Check if #object is a collection.
+  # Return true if #object is a collection.
   def collection?
-    @object.respond_to?(:each) && !@object.respond_to?(:each_pair)
+    self.class.is_collection?(@object)
   end
 
   # = Class Methods
@@ -128,8 +128,13 @@ class SimpleSerializer
     # Same as #serialize, but raises ArgumentError if `collection`
     # doesn't appear to be a collection.
     def serialize_each(collection)
-      raise ArgumentError, "collection does not appear to be a collection" unless collection.respond_to?(:each)
+      raise ArgumentError, "collection does not appear to be a collection" unless is_collection?(collection)
       new(collection).serializable_hash
+    end
+
+    # Check if #object is a collection.
+    def is_collection?(object)
+      object.respond_to?(:each) && !object.respond_to?(:each_pair)
     end
   end
 
