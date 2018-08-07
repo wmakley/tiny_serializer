@@ -186,8 +186,7 @@ class SimpleSerializer
 
       json_array = []
       collection.each do |object|
-        serializer_instance = serializer.new(object, @options)
-        json_array << serializer_instance.serialize
+        json_array << serializer.new(object, @options).serializable_hash
       end
 
       hash[key] = json_array
