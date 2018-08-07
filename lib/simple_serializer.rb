@@ -82,12 +82,9 @@ class SimpleSerializer
     return serialize_single_object_to_hash unless collection?
 
     json = []
-    original_object = @object
-    original_object.each do |object|
-      @object = object
-      json << serialize_single_object_to_hash
+    @object.each do |object|
+      json << self.class.new(object, @options).serializable_hash
     end
-    @object = original_object
     json
   end
 
@@ -132,7 +129,7 @@ class SimpleSerializer
   private
 
   # Private serialization implementation for a single object.
-  # @object must be set to a single object before calling.
+  # @object must be a single object.
   def serialize_single_object_to_hash
     return nil if @object.nil?
 
