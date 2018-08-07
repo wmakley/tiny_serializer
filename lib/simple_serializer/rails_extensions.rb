@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SimpleSerializer
   # Small convenience improvements to SimpleSerializer
   # that are automatically included as serializer instance methods

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "simple_serializer/version"
 require "simple_serializer/dsl"
 require "active_support/json"
