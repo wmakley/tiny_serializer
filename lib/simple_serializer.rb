@@ -125,7 +125,12 @@ class SimpleSerializer
       new(object).serializable_hash
     end
 
-    alias serialize_each serialize
+    # Same as #serialize, but raises ArgumentError if `collection`
+    # doesn't appear to be a collection.
+    def serialize_each(collection)
+      raise ArgumentError, "collection does not appear to be a collection" unless collection.respond_to?(:each)
+      new(collection).serializable_hash
+    end
   end
 
   private
