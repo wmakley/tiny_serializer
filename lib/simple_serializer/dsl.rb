@@ -77,16 +77,16 @@ class SimpleSerializer
     #
     # The parameters *record_type* and *polymorphic* are ignored,
     # and provided only to smooth migration to fast_jsonapi[https://github.com/Netflix/fast_jsonapi].
-    def has_one(association_name, serializer: nil, record_type: nil, polymorphic: false, &block)
-      sub_record(association_name, serializer: serializer, &block)
+    def has_one(association_name, key: association_name, serializer: nil, record_type: nil, polymorphic: false, &block)
+      sub_record(association_name, key: key, serializer: serializer, &block)
     end
 
     # Alias of #sub_record
     #
     # The parameters *record_type* and *polymorphic* are ignored,
     # and provided only to smooth migration to fast_jsonapi[https://github.com/Netflix/fast_jsonapi].
-    def belongs_to(association_name, serializer: nil, record_type: nil, polymorphic: false, &block)
-      sub_record(association_name, serializer: serializer, &block)
+    def belongs_to(association_name, key: association_name, serializer: nil, record_type: nil, polymorphic: false, &block)
+      sub_record(association_name, key: key, serializer: serializer, &block)
     end
 
     # Define a serializer to use for a sub-object of SimpleSerializer#object.
@@ -115,7 +115,7 @@ class SimpleSerializer
     # The *record_type* parameter is ignored, and provided only to
     # smooth migration to fast_jsonapi[https://github.com/Netflix/fast_jsonapi].
     def has_many(name, key: name, serializer: nil, record_type: nil, &block)
-      collection(name, serializer: serializer, &block)
+      collection(name, key: key, serializer: serializer, &block)
     end
 
     # Define a serializer to use to serialize a collection of objects

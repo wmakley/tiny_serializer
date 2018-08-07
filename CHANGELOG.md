@@ -2,6 +2,7 @@
 
 ## 0.5.1
 
+* Fix `key` arguments not being passed around correctly.
 * Minor code clarity improvements.
 
 ## 0.5.0
