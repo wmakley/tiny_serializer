@@ -1,5 +1,9 @@
 # SimpleSerializer Change Log
 
+## 0.5.2
+
+* Fix place I forgot to create a new serializer instance.
+
 ## 0.5.1
 
 * Fix `key` arguments not being passed around correctly.
