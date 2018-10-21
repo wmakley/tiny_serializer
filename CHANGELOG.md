@@ -1,5 +1,9 @@
 # SimpleSerializer Change Log
 
+## 1.0.1
+
+* Minor rubocop config tweaks and add frozen\_string_literal to specs.
+
 ## 1.0.0
 
 * Remove netflix/fast_jsonapi NOOP compatibily methods.
