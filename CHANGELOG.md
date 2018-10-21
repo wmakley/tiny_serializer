@@ -1,5 +1,10 @@
 # SimpleSerializer Change Log
 
+## 1.0.0
+
+* Remove netflix/fast_jsonapi NOOP compatibily methods.
+* Rubocop style improvements.
+
 ## 0.5.3
 
 * Raise ArgumentError if serialize_each called without a collection.

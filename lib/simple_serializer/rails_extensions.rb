@@ -5,7 +5,7 @@ class SimpleSerializer
   # that are automatically included as serializer instance methods
   # when used in a Rails app.
   module RailsExtensions
-    # Shortcut to +Rails.application.routes.url_helpers+.
+    # Alias of +Rails.application.routes.url_helpers+.
     def url_helpers
       Rails.application.routes.url_helpers
     end

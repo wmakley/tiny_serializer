@@ -3,34 +3,33 @@
 require "active_support/core_ext/string/inflections"
 
 class SimpleSerializer
+  # The SimpleSerializer class macros.
   module DSL
-    # Get all the sub-record attribute definitions (created by #belongs_to, #has_one, etc.)
+    # Get all the sub-record attribute definitions (created by #belongs_to,
+    # #has_one, etc.)
     def sub_records
-      unless @sub_records
+      @sub_records ||=
         if superclass.respond_to?(:sub_records)
-          @sub_records = superclass.sub_records.dup
+          superclass.sub_records.dup
         else
-          @sub_records = []
+          []
         end
-      end
-      return @sub_records
     end
 
-    # Get only the names of the sub-record attribute definitions (created by #belongs_to, #has_one, etc.)
+    # Get only the names of the sub-record attribute definitions (created by
+    # #belongs_to, #has_one, etc.)
     def sub_record_names
       sub_records.map(&:first)
     end
 
     # Get all the collection definitions (created by #has_many).
     def collections
-      unless @collections
+      @collections ||=
         if superclass.respond_to?(:collections)
-          @collections = superclass.collections.dup
+          superclass.collections.dup
         else
-          @collections = []
+          []
         end
-      end
-      return @collections
     end
 
     # Get only the names of the collections definitions (created by #has_many).
@@ -38,7 +37,8 @@ class SimpleSerializer
       collections.map(&:first)
     end
 
-    # Definite a new attribute to serialize. The value to serialize is retrieved in one of two ways:
+    # Definite a new attribute to serialize. The value to serialize is retrieved
+    # in one of two ways:
     #
     # 1. *Default:* Calls #public_send(name) on SimpleSerializer#object.
     # 2. *Block:* The return value of the block is used.
@@ -46,9 +46,11 @@ class SimpleSerializer
     # name::
     #   The name of the attribute
     # key::
-    #   Optional. Defaults to *name*. The Hash key to assign the attribute's value to.
+    #   Optional. Defaults to *name*. The Hash key to assign the attribute's
+    #   value to.
     # is_id::
-    #   Optional. Whether the attribute is a database ID. Guessed from its name by default.
+    #   Optional. Whether the attribute is a database ID. Guessed from its name
+    #   by default.
     #
     def attribute(name, key: name, is_id: _is_id?(name), &block)
       _initialize_attributes
@@ -76,18 +78,12 @@ class SimpleSerializer
     end
 
     # Alias of #sub_record
-    #
-    # The parameters *record_type* and *polymorphic* are ignored,
-    # and provided only to smooth migration to fast_jsonapi[https://github.com/Netflix/fast_jsonapi].
-    def has_one(association_name, key: association_name, serializer: nil, record_type: nil, polymorphic: false, &block)
+    def has_one(association_name, key: association_name, serializer: nil, &block)
       sub_record(association_name, key: key, serializer: serializer, &block)
     end
 
     # Alias of #sub_record
-    #
-    # The parameters *record_type* and *polymorphic* are ignored,
-    # and provided only to smooth migration to fast_jsonapi[https://github.com/Netflix/fast_jsonapi].
-    def belongs_to(association_name, key: association_name, serializer: nil, record_type: nil, polymorphic: false, &block)
+    def belongs_to(association_name, key: association_name, serializer: nil, &block)
       sub_record(association_name, key: key, serializer: serializer, &block)
     end
 
@@ -101,7 +97,8 @@ class SimpleSerializer
     #   Optional. The serializer class to use. Inferred from name if blank.
     #   Must be a subclass of SimpleSerializer.
     # key::
-    #   Optional. Defaults to *name*. The Hash key to assign the sub-record's JSON to.
+    #   Optional. Defaults to *name*. The Hash key to assign the sub-record's
+    #   JSON to.
     #
     def sub_record(name, key: name, serializer: nil, &block)
       if serializer.nil?
@@ -114,10 +111,7 @@ class SimpleSerializer
     end
 
     # Alias of #collection
-    #
-    # The *record_type* parameter is ignored, and provided only to
-    # smooth migration to fast_jsonapi[https://github.com/Netflix/fast_jsonapi].
-    def has_many(name, key: name, serializer: nil, record_type: nil, &block)
+    def has_many(name, key: name, serializer: nil, &block)
       collection(name, key: key, serializer: serializer, &block)
     end
 
@@ -129,10 +123,12 @@ class SimpleSerializer
     # name::
     #   The name of the collection.
     # key::
-    #   Optional. Defaults to *name*. The Hash key to assign the serialized Array to.
+    #   Optional. Defaults to *name*. The Hash key to assign the serialized
+    #   Array to.
     # serializer::
-    #   Optional, inferred from *collection_name*. The serializer class to use to serialize each item in the collection.
-    #   Must be a subclass of SimpleSerializer.
+    #   Optional, inferred from *collection_name*. The serializer class to use
+    #   to serialize each item in the collection. Must be a subclass of
+    #   SimpleSerializer.
     #
     def collection(name, key: name, serializer: nil, &block)
       if serializer.nil?
@@ -143,23 +139,14 @@ class SimpleSerializer
       collections << [name, key, serializer, block]
     end
 
-    # NOOP for smoothing migration to fast_jsonapi[https://github.com/Netflix/fast_jsonapi].
-    def set_type(_)
-    end
-
-    # NOOP for smoothing migration to fast_jsonapi[https://github.com/Netflix/fast_jsonapi].
-    def set_id(_)
-    end
-
     # Private method to initialize inherited attributes.
     def _initialize_attributes # :nodoc:
-      return true if @attributes
-      if superclass.respond_to?(:attributes)
-        @attributes = superclass.attributes.dup
-      else
-        @attributes = []
-      end
-      return @attributes
+      @attributes ||=
+        if superclass.respond_to?(:attributes)
+          superclass.attributes.dup
+        else
+          []
+        end
     end
 
     # Private method to check if an attribute name is an ID.

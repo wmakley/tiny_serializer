@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    simple_serializer (0.5.2)
+    simple_serializer (1.0.0)
       activesupport (>= 4.2)
 
 GEM
