@@ -1,5 +1,9 @@
 # SimpleSerializer Change Log
 
+## 2.0.1
+
+* Bump version so I can publish under the correct rubygems account.
+
 ## 2.0.0
 
 * Rename to "tiny_serializer" and push to rubygems.org.
