@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    simple_serializer (1.0.0)
+    tiny_serializer (1.0.0)
       activesupport (>= 4.2)
 
 GEM
@@ -42,7 +42,7 @@ DEPENDENCIES
   bundler (~> 1.0)
   rake (~> 10.0)
   rspec (~> 3.5)
-  simple_serializer!
+  tiny_serializer!
 
 BUNDLED WITH
-   1.16.5
+   1.16.6

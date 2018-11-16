@@ -1,15 +1,15 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "simple_serializer/version"
+require "tiny_serializer/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "simple_serializer"
-  spec.version       = SimpleSerializer::VERSION
+  spec.name          = "tiny_serializer"
+  spec.version       = TinySerializer::VERSION
   spec.authors       = ["William Makley"]
   spec.email         = ["william@pioneerstreet.com"]
 
-  spec.summary       = %q{Simple Ruby JSON Serialization DSL}
+  spec.summary       = %q{Tiny Ruby JSON Serialization DSL}
   # spec.description   = %q{TODO: Write a longer description or delete this line.}
   spec.homepage      = "https://github.com/wmakley/simple_serializer.git"
   spec.license       = "MIT"

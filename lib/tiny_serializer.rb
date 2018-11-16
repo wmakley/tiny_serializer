@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "simple_serializer/version"
-require "simple_serializer/dsl"
+require "tiny_serializer/version"
+require "tiny_serializer/dsl"
 require "active_support/json"
 require "active_support/core_ext/class/attribute"
 
@@ -21,7 +21,7 @@ require "active_support/core_ext/class/attribute"
 #   end
 #
 #   # my_object_serializer.rb
-#   class MyObjectSerializer < SimpleSerializer
+#   class MyObjectSerializer < TinySerializer
 #     attributes :id,
 #                :first_name,
 #                :last_name,
@@ -44,10 +44,10 @@ require "active_support/core_ext/class/attribute"
 #
 # == RailsExtensions
 #
-# The RailsExtensions module is automatically prepended when SimpleSerializer
+# The RailsExtensions module is automatically prepended when TinySerializer
 # is used in a Rails app. It defines some small convenience instance methods.
 #
-class SimpleSerializer
+class TinySerializer
   extend DSL
 
   if defined?(Rails)
@@ -120,7 +120,7 @@ class SimpleSerializer
   class << self
     # The same as:
     #
-    #   SimpleSerializer.new(object).serializable_hash
+    #   TinySerializer.new(object).serializable_hash
     def serialize(object)
       new(object).serializable_hash
     end

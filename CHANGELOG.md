@@ -2,6 +2,7 @@
 
 ## 1.0.1
 
+* Rename to tiny_serializer and push to rubygems.org
 * Minor rubocop config tweaks and add frozen\_string_literal to specs.
 
 ## 1.0.0

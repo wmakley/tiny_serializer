@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class SimpleSerializer
-  # Small convenience improvements to SimpleSerializer
+class TinySerializer
+  # Small convenience improvements to TinySerializer
   # that are automatically included as serializer instance methods
   # when used in a Rails app.
   module RailsExtensions
@@ -10,7 +10,7 @@ class SimpleSerializer
       Rails.application.routes.url_helpers
     end
 
-    # Return +Rails.logger+ if SimpleSerializer#logger is not set.
+    # Return +Rails.logger+ if TinySerializer#logger is not set.
     def logger
       super || Rails.logger
     end

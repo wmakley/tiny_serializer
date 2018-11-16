@@ -2,8 +2,8 @@
 
 require "active_support/core_ext/string/inflections"
 
-class SimpleSerializer
-  # The SimpleSerializer class macros.
+class TinySerializer
+  # The TinySerializer class macros.
   module DSL
     # Get all the sub-record attribute definitions (created by #belongs_to,
     # #has_one, etc.)
@@ -40,7 +40,7 @@ class SimpleSerializer
     # Definite a new attribute to serialize. The value to serialize is retrieved
     # in one of two ways:
     #
-    # 1. *Default:* Calls #public_send(name) on SimpleSerializer#object.
+    # 1. *Default:* Calls #public_send(name) on TinySerializer#object.
     # 2. *Block:* The return value of the block is used.
     #
     # name::
@@ -87,7 +87,7 @@ class SimpleSerializer
       sub_record(association_name, key: key, serializer: serializer, &block)
     end
 
-    # Define a serializer to use for a sub-object of SimpleSerializer#object.
+    # Define a serializer to use for a sub-object of TinySerializer#object.
     # <b>If given a block:</b> Will use the block to retrieve the
     # object, instead of public_send(name).
     #
@@ -95,7 +95,7 @@ class SimpleSerializer
     #   The method name of the sub-object.
     # serializer::
     #   Optional. The serializer class to use. Inferred from name if blank.
-    #   Must be a subclass of SimpleSerializer.
+    #   Must be a subclass of TinySerializer.
     # key::
     #   Optional. Defaults to *name*. The Hash key to assign the sub-record's
     #   JSON to.
@@ -104,7 +104,7 @@ class SimpleSerializer
       if serializer.nil?
         serializer = "#{name.to_s.camelize}Serializer".constantize
       elsif !_is_serializer?(serializer)
-        raise ArgumentError, "#{serializer} does not appear to be a SimpleSerializer"
+        raise ArgumentError, "#{serializer} does not appear to be a TinySerializer"
       end
 
       sub_records << [name, key, serializer, block]
@@ -116,7 +116,7 @@ class SimpleSerializer
     end
 
     # Define a serializer to use to serialize a collection of objects
-    # as an Array. Will call #public_send(name) on SimpleSerializer#object
+    # as an Array. Will call #public_send(name) on TinySerializer#object
     # to get the items in the collection, or use the return value of
     # the block.
     #
@@ -128,13 +128,13 @@ class SimpleSerializer
     # serializer::
     #   Optional, inferred from *collection_name*. The serializer class to use
     #   to serialize each item in the collection. Must be a subclass of
-    #   SimpleSerializer.
+    #   TinySerializer.
     #
     def collection(name, key: name, serializer: nil, &block)
       if serializer.nil?
         serializer = "#{name.to_s.singularize.camelize}Serializer".constantize
       elsif !_is_serializer?(serializer)
-        raise ArgumentError, "#{serializer} does not appear to be a SimpleSerializer"
+        raise ArgumentError, "#{serializer} does not appear to be a TinySerializer"
       end
       collections << [name, key, serializer, block]
     end
@@ -154,9 +154,9 @@ class SimpleSerializer
       name == :id || name.to_s.end_with?("_id")
     end
 
-    # Private method to check if a class is a SimpleSerializer subclass
+    # Private method to check if a class is a TinySerializer subclass
     def _is_serializer?(klass)
-      klass <= SimpleSerializer
+      klass <= TinySerializer
     end
   end
 end

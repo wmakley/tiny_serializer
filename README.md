@@ -1,4 +1,4 @@
-# SimpleSerializer
+# TinySerializer
 
 Simple DSL for converting objects to Hashes, which is mostly API-compatible with
 [ActiveModel::Serializers](https://github.com/rails-api/active_model_serializers).
@@ -12,7 +12,7 @@ which has proven to be one of the biggest sources of confusion and complexity fo
 
 Use if you have heavily invested in [active_model_serializers](https://github.com/rails-api/active_model_serializers), but have started experiencing the same frustrations I had with it and can't transition to [jsonapi-rb](http://jsonapi-rb.org/) or [fast_jsonapi](https://github.com/Netflix/fast_jsonapi).
 
-![Travis CI Build Status](https://travis-ci.org/wmakley/simple_serializer.svg?branch=master)
+![Travis CI Build Status](https://travis-ci.org/wmakley/tiny_serializer.svg?branch=master)
 
 **Benefits:**
 
@@ -39,7 +39,7 @@ MyObject = Struct.new(:id, :first_name, :last_name, :date) do
   def related_items; []; end
 end
 
-class MyObjectSerializer < SimpleSerializer
+class MyObjectSerializer < TinySerializer
   attributes :id,
              :first_name,
              :last_name,
@@ -87,7 +87,7 @@ Produces:
 
 ### Usage in Rails:
 
-In Rails, calling `.serialize` is optional because **SimpleSerializer** implements all the 'magic' methods (`as_json`, `to_json`, and `serializable_hash`), although I'm not the biggest fan (it loses some explicitness):
+In Rails, calling `.serialize` is optional because **TinySerializer** implements all the 'magic' methods (`as_json`, `to_json`, and `serializable_hash`), although I'm not the biggest fan (it loses some explicitness):
 
 ```ruby
 @model = MyObject.new(1, "Fred", "Flintstone", Date.new(2000, 1, 1))
@@ -104,7 +104,7 @@ then uses `#as_json` to serialize the resulting value. If you define the attribu
 Collections are handled automatically:
 
 ```ruby
-class MyObjectSerializer < SimpleSerializer
+class MyObjectSerializer < TinySerializer
   attributes :id, :first_name
 end
 
@@ -129,7 +129,7 @@ Produces:
 The DSL methods `belongs_to`, `has_one`, and `has_many` are all synonyms for "use this serializer to serialize this property". They are basically syntax sugar for:
 
 ```ruby
-class MySerializer < SimpleSerializer
+class MySerializer < TinySerializer
   attribute :parent do |object|
     ParentSerializer.new(object.parent).serialize
   end
@@ -141,7 +141,7 @@ object or collection. For example, to avoid loading every single item in a
 `has_many` relation:
 
 ```ruby
-class MySerializer < SimpleSerializer
+class MySerializer < TinySerializer
   has_many :items, serializer: ItemSerializer do |object|
     object.items.limit(100)
   end
@@ -155,7 +155,7 @@ method available.
 
 
 ```ruby
-class ItemSerializer < SimpleSerializer
+class ItemSerializer < TinySerializer
   attribute :link do
     url_helpers.item_path(object)
   end
@@ -168,7 +168,7 @@ If you don't want ID's to be serialized as numeric types,
 you can have them automatically detected and coerced to Strings.
 
 ```ruby
-class MyObjectSerializer < SimpleSerializer
+class MyObjectSerializer < TinySerializer
   self.coerce_ids_to_string = true
 end
 ```
@@ -176,7 +176,7 @@ end
 To enable globally, but opt out for a specific attribute:
 
 ```ruby
-class MyObjectSerializer < SimpleSerializer
+class MyObjectSerializer < TinySerializer
   self.coerce_ids_to_string = true
 
   attribute :id, is_id: false
@@ -187,7 +187,7 @@ end
 If you want to pass in options to the serializer you can access via the second argument of the block
 
 
-class MyObjectSerializer < SimpleSerializer
+class MyObjectSerializer < TinySerializer
   attribute :id do |object, options|
     options[:prefix] + object.id
   end
@@ -208,7 +208,7 @@ This example works as you would expect from [active_model_serializers](https://g
 (the `name` attribute will only appear if you use `MyObjectSerializer::WithName.serialize(my_object)`):
 
 ```ruby
-class MyObjectSerializer < SimpleSerializer
+class MyObjectSerializer < TinySerializer
   attribute :id
 
   class WithName < MyObjectSerializer
@@ -223,18 +223,16 @@ end
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'simple_serializer', git: 'https://github.com/wmakley/simple_serializer.git'
+gem 'tiny_serializer'
 ```
 
 And then execute:
 
     $ bundle
 
-I will push it to rubygems.org once I pick a new name!
-
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/wmakley/simple_serializer.
+Bug reports and pull requests are welcome on GitHub at https://github.com/wmakley/tiny_serializer.
 
 ## License
 

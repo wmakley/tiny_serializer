@@ -2,11 +2,11 @@
 require "spec_helper"
 require "date"
 
-RSpec.describe SimpleSerializer do
-  # Build a new SimpleSerializer subclass. string and/or block will be evaluated
+RSpec.describe TinySerializer do
+  # Build a new TinySerializer subclass. string and/or block will be evaluated
   # in class context.
   def serializer(string = nil, &block)
-    klass = Class.new(SimpleSerializer)
+    klass = Class.new(TinySerializer)
     klass.class_eval(string) if string
     klass.class_eval(&block) if block_given?
     klass
@@ -22,7 +22,7 @@ RSpec.describe SimpleSerializer do
     TestStruct.new(1, "test", Date.new(2000, 1, 1), true, sub_object, [])
   end
 
-  class SubObjectSerializer < SimpleSerializer
+  class SubObjectSerializer < TinySerializer
     attributes :id, :name
   end
 
@@ -190,7 +190,7 @@ RSpec.describe SimpleSerializer do
         end
       end
 
-      class SubObjectWithOptionsSerializer < SimpleSerializer
+      class SubObjectWithOptionsSerializer < TinySerializer
         attributes :id, :name
         attribute :options do |_, options|
           options[:foo]
@@ -217,7 +217,7 @@ RSpec.describe SimpleSerializer do
     end
 
     context "when a collection relationship is defined" do
-      class CollectionSerializer < SimpleSerializer
+      class CollectionSerializer < TinySerializer
         attributes :id, :name
       end
 
@@ -259,7 +259,7 @@ RSpec.describe SimpleSerializer do
       end
 
       context "when options provided to parent serializer" do
-        class CollectionUsingOptionsSerializer < SimpleSerializer
+        class CollectionUsingOptionsSerializer < TinySerializer
           attribute :foo do |object, options|
             "#{object.name} #{options[:foo]}"
           end
@@ -309,7 +309,7 @@ RSpec.describe SimpleSerializer do
   describe "DSL" do
     describe "#collection" do
       context "when serializer is nil" do
-        class CollectionItemSerializer < SimpleSerializer
+        class CollectionItemSerializer < TinySerializer
           attributes :id, :boolean
         end
         it "infers the serializer class from the collection name" do
@@ -320,7 +320,7 @@ RSpec.describe SimpleSerializer do
         end
       end
 
-      context "when serializer is not a SimpleSerializer subclass" do
+      context "when serializer is not a TinySerializer subclass" do
         it "raises ArgumentError" do
           expect {
             serializer do
@@ -380,7 +380,7 @@ RSpec.describe SimpleSerializer do
         expect(s2.sub_record_names).to eq([:sub_object, :sub_object_2])
       end
 
-      context "when serializer is not a SimpleSerializer subclass" do
+      context "when serializer is not a TinySerializer subclass" do
         it "raises ArgumentError" do
           expect {
             serializer do
