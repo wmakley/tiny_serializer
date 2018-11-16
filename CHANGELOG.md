@@ -1,5 +1,9 @@
 # SimpleSerializer Change Log
 
+## 2.0.2
+
+* Fix major incorrect require statement.
+
 ## 2.0.1
 
 * Bump version so I can publish under the correct rubygems account.

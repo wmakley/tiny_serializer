@@ -51,7 +51,7 @@ class TinySerializer
   extend DSL
 
   if defined?(Rails)
-    require "simple_serializer/rails_extensions"
+    require "tiny_serializer/rails_extensions"
     prepend RailsExtensions
   end
 
