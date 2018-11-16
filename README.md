@@ -223,7 +223,7 @@ end
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'tiny_serializer'
+gem 'tiny_serializer', '~> 2.0.0'
 ```
 
 And then execute:
