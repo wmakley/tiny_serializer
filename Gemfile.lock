@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    tiny_serializer (1.0.0)
+    tiny_serializer (2.0.0)
       activesupport (>= 4.2)
 
 GEM
@@ -45,4 +45,4 @@ DEPENDENCIES
   tiny_serializer!
 
 BUNDLED WITH
-   1.16.6
+   1.17.1
