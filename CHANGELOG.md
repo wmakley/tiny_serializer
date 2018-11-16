@@ -1,8 +1,8 @@
 # SimpleSerializer Change Log
 
-## 1.0.1
+## 2.0.0
 
-* Rename to tiny_serializer and push to rubygems.org
+* Rename to "tiny_serializer" and push to rubygems.org.
 * Update .travis.yml ruby versions to 2.4.5 and 2.5.3
 * Minor rubocop config tweaks and add frozen\_string_literal to specs.
 
