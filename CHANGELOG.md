@@ -1,5 +1,10 @@
 # TinySerializer Change Log
 
+## 2.1.1
+
+* Remove debug statement from mock_rails.rb.
+* Update homepage url in gemspec.
+
 ## 2.1.0
 
 * Pass options through correctly when using .serialize class method.
