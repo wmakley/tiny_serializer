@@ -1,4 +1,4 @@
-# SimpleSerializer Change Log
+# TinySerializer Change Log
 
 ## 2.1.0
 
