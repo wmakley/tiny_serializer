@@ -25,5 +25,3 @@ module Rails
     end
   end
 end
-
-puts "MOCK RAILS LOADED"
