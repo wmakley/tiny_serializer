@@ -121,8 +121,8 @@ class TinySerializer
     # The same as:
     #
     #   TinySerializer.new(object).serializable_hash
-    def serialize(object)
-      new(object).serializable_hash
+    def serialize(object, options = {})
+      new(object, options).serializable_hash
     end
 
     # Same as #serialize, but raises ArgumentError if `collection`

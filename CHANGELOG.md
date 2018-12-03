@@ -1,5 +1,11 @@
 # SimpleSerializer Change Log
 
+## 2.1.0
+
+* Pass options through correctly when using .serialize class method.
+* Add tests for RailsExtensions.
+* Add .editorconfig.
+
 ## 2.0.2
 
 * Fix major incorrect require statement.

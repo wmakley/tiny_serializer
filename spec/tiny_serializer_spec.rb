@@ -433,4 +433,21 @@ RSpec.describe TinySerializer do
       )
     end
   end
+
+  describe ".serialize" do
+    def serializer
+      super do
+        attribute :host do
+          options.fetch(:host)
+        end
+      end
+    end
+
+    it "passes options through to the serializer instance" do
+      options = { host: "localhost" }
+      json = serializer.serialize(TestStruct.new(1), options)
+      expect(json[:host]).to eq(options[:host])
+    end
+  end
+
 end
