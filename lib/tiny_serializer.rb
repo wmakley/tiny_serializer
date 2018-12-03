@@ -50,7 +50,7 @@ require "active_support/core_ext/class/attribute"
 class TinySerializer
   extend DSL
 
-  if defined?(Rails)
+  if defined?(::Rails)
     require "tiny_serializer/rails_extensions"
     prepend RailsExtensions
   end
