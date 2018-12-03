@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Tiny Ruby JSON Serialization DSL}
   # spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "https://github.com/wmakley/simple_serializer.git"
+  spec.homepage      = "https://github.com/wmakley/tiny_serializer.git"
   spec.license       = "MIT"
 
   # Specify which files should be added to the gem when it is released.
