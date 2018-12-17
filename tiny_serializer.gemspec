@@ -1,4 +1,3 @@
-
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "tiny_serializer/version"
@@ -26,6 +25,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "activesupport", ">= 4.2"
 
   spec.add_development_dependency "bundler", "~> 1.0"
-  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "rake", "~> 12.0"
   spec.add_development_dependency "rspec", "~> 3.5"
 end
