@@ -182,9 +182,10 @@ class MyObjectSerializer < TinySerializer
 end
 ```
 
-### Notes on Options
+### Passing options and additional arguments to the serializer
 
-If you want to pass in options to the serializer you can access via the second argument of the block
+If you pass in an options object as the second argument to the serializer, it will be
+available for use within the serializer. For example:
 
 ```ruby
 class MyObjectSerializer < TinySerializer
