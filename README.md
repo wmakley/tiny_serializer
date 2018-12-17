@@ -19,7 +19,6 @@ Use if you have heavily invested in [active_model_serializers](https://github.co
 * Extremely simple and deterministic behavior; no adapter classes and other complications. Just turns Objects into Hashes.
 * Easy to understand; uses `#as_json` to serialize attributes.
 * Simple and explicit invocation.
-* Does not leak memory in development.
 * ~200 lines of code, give or take.
 * Seems pretty darn fast, at least as fast as `public_send`, `Hash#[]=`, and `Hash#to_json` can be.
 
